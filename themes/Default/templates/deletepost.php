@@ -11,7 +11,7 @@
 		<br /><br />
 		<form action="?act=deletePost&amp;id=<?php echo $_GET['id']?>" method="post">
 			<p>
-				<?php secureForm(); ?>
+				<?php secureForm("deletePost"); ?>
 				<input type="hidden" name="formsent" value="1" />
 				<input type="submit" class="button" name="submit" value="Delete Post" />
 			</p>

@@ -52,7 +52,7 @@ class ConfigurationEdit extends adminSub
 		
 		if(isset($_POST['post']) && $_POST['post'] == 'update')
 		{
-			if(isSecureForm())
+			if(isSecureForm("editForum"))
 			{
 				$errors = $this->validate();
 				if (!is_array($errors))

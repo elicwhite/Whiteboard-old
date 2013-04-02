@@ -34,7 +34,7 @@ if ($this->ERRORS && count($this->ERRORS) > 0)
 	<form action="index.php?act=controlPanel&page=<?php echo $this->ACT?>" method="post" enctype="multipart/form-data">
 	<div style="display: none;">
 		<input type="hidden" name="action" value="<?php echo $this->ACT?>" />
-		<?php secureForm(); ?>
+		<?php secureForm("controlPanel"); ?>
 	</div>
 	<?php
 	

@@ -56,7 +56,7 @@ class ForumsStruct extends adminSub
 		ob_start();
 		
 		$content = new tpl(ADMIN_PATH.'display/templates/forums_structure.php'); // include the content tpl file
-		if(isSecureForm() && isset($_POST['post']) && $_POST['post'] == '1')
+		if(isSecureForm("structForum") && isset($_POST['post']) && $_POST['post'] == '1')
 		{
 			$update_string = "Forum information updated successfully.<br /><br />";
 			$content->add("INFORMATION_UPDATED", $update_string);

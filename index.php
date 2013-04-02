@@ -224,6 +224,7 @@ $header->add("STYLESHEETS", $css); // Add our array of stylesheets to our templa
 $header->add("STYLESHEET", $styleSheet);
 
 $js = $pageClass->getJS();
+
 $header->add("SCRIPTS", $js); // Put our scripts in our template
 
 echo $header->parse(); // Parse out our header file and continue

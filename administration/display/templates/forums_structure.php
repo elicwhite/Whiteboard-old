@@ -4,7 +4,7 @@
 </div>
 <form action="" method="post">
 <div class="centerbox">
-	<?php secureForm(); ?>
+	<?php secureForm("structForum"); ?>
 	<input type="hidden" name="post" value="1" />
 	<?php
 	foreach($this->STRUCTUREDFORUMS as $forum)

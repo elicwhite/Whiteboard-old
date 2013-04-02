@@ -23,8 +23,9 @@
  Author: SaroSoftware
  Date Created: 3/29/09
  Last Edited By: Eli White
- Last Edited Date: 4/10/09
+ Last Edited Date: 4/18/10
  Latest Changes:
+ 	4/18/10 - Fixed a permissions issue
  	4/10/09 - Converted to class
 	3/29/09 - Initial Creation
  
@@ -130,7 +131,8 @@ class topicReply extends tDisplay
 			!$GLOBALS['super']->user->can("Forum".$this->currentForum['id'], "Reply")
 		)
 		{
-			echo $GLOBALS['super']->user->noPerm();			
+			echo $GLOBALS['super']->user->noPerm();
+			return;			
 		}
 		elseif ($this->noTopic)
 		{
@@ -139,72 +141,100 @@ class topicReply extends tDisplay
 			$error->add("error_message", "You have reached this page in error.<br />Please go back and try again.");
 			echo $error->parse();
 		}
-		else if (isSecureForm() && isset($_POST['formsent']) && $_POST['formsent'] == "1")
-		{
-			
-			// for now, lets ignore preview
-
-			$message = $_POST['message'];
-			
 		
-			if (strlen($message) <= 10)
+		if (isset($_POST['formsent']) && $_POST['formsent'] == "1")
+		{
+			if (isSecureForm("topicReply"))
 			{
-				$errorArray[] = "The message must be greater than 10 characters";
-			}
+				// for now, lets ignore preview
+	
+				$message = $_POST['message'];
+				
 			
-			if (!count($errorArray))
+				if (strlen($message) <= 10)
+				{
+					$errorArray[] = "The message must be greater than 10 characters";
+				}
+				
+				if (!count($errorArray))
+				{
+					$topicId = $GLOBALS['super']->db->escape(intval($_GET['id']));
+					$message = $GLOBALS['super']->db->escape(strip_tags($message));
+					
+					// for testing purposes, we need to make this dynamic
+					// when we add the user system
+					$posterid = $GLOBALS['super']->user->id; 
+					
+					// Add the post
+					$addPostSql = "INSERT INTO ".TBL_PREFIX."posts (
+								`topic_id`,
+								`user_id`,
+								`time_added`,
+								`message`
+								)
+								VALUES (
+								'".$topicId."', '".$posterid."',".time().", '".$message."'
+								);
+								";
+					$GLOBALS['super']->db->query($addPostSql);
+					$postid = $GLOBALS['super']->db->fetch_lastid();
+					
+					// Update user post count
+					$updateUsersSQL = "UPDATE ".TBL_PREFIX."users SET `total_posts` = `total_posts`+1 WHERE `id`='".$posterid."'";
+					$GLOBALS['super']->db->query($updateUsersSQL);
+					
+					
+					// Update topic post count
+					$updateTopicSQL = "UPDATE ".TBL_PREFIX."topics SET `post_count` = `post_count`+1, `time_modified`=".time().", `last_user_id`=".$posterid." WHERE `id`='".$topicId."'";
+					//echo $updateTopicSQL;
+					$GLOBALS['super']->db->query($updateTopicSQL);
+					
+					
+					// Update forum post count
+					$forumId = "SELECT `forum_id` FROM ".TBL_PREFIX."topics WHERE `id`=".$topicId;
+					$forumId = $GLOBALS['super']->db->query($forumId);
+					$forumId = $GLOBALS['super']->db->fetch_result($forumId);
+					
+					$updateTopicSQL = "UPDATE ".TBL_PREFIX."forums SET `post_count` = `post_count`+1, `last_post_id`=".$postid." WHERE `id`='".$forumId."'";
+					$GLOBALS['super']->db->query($updateTopicSQL);
+					
+					
+					// we successfully made the post
+					$success = new tpl(ROOT_PATH.'themes/Default/templates/success_redir.php');
+					$success->add("message","Reply made successfully!");
+					$success->add("url","index.php?act=tdisplay&id=".$topicId.'&page=last');
+					echo $success->parse();
+				}
+			}
+			else 
 			{
-				$topicId = $GLOBALS['super']->db->escape(intval($_GET['id']));
-				$message = $GLOBALS['super']->db->escape(strip_tags($message));
-				
-				// for testing purposes, we need to make this dynamic
-				// when we add the user system
-				$posterid = $GLOBALS['super']->user->id; 
-				
-				// Add the post
-				$addPostSql = "INSERT INTO ".TBL_PREFIX."posts (
-							`topic_id`,
-							`user_id`,
-							`time_added`,
-							`message`
-							)
-							VALUES (
-							'".$topicId."', '".$posterid."',".time().", '".$message."'
-							);
-							";
-				$GLOBALS['super']->db->query($addPostSql);
-				$postid = $GLOBALS['super']->db->fetch_lastid();
-				
-				// Update user post count
-				$updateUsersSQL = "UPDATE ".TBL_PREFIX."users SET `total_posts` = `total_posts`+1 WHERE `id`='".$posterid."'";
-				$GLOBALS['super']->db->query($updateUsersSQL);
-				
-				
-				// Update topic post count
-				$updateTopicSQL = "UPDATE ".TBL_PREFIX."topics SET `post_count` = `post_count`+1, `time_modified`=".time().", `last_user_id`=".$posterid." WHERE `id`='".$topicId."'";
-				//echo $updateTopicSQL;
-				$GLOBALS['super']->db->query($updateTopicSQL);
-				
-				
-				// Update forum post count
-				$forumId = "SELECT `forum_id` FROM ".TBL_PREFIX."topics WHERE `id`=".$topicId;
-				$forumId = $GLOBALS['super']->db->query($forumId);
-				$forumId = $GLOBALS['super']->db->fetch_result($forumId);
-				
-				$updateTopicSQL = "UPDATE ".TBL_PREFIX."forums SET `post_count` = `post_count`+1, `last_post_id`=".$postid." WHERE `id`='".$forumId."'";
-				$GLOBALS['super']->db->query($updateTopicSQL);
-				
-				
-				// we successfully made the post
-				$success = new tpl(ROOT_PATH.'themes/Default/templates/success_redir.php');
-				$success->add("message","Reply made successfully!");
-				$success->add("url","index.php?act=tdisplay&id=".$topicId.'&page=last');
-				die($success->parse());
-				
+				$errorArray[] = "You cannot attempt to make a different post after this form has been opened.";
 			}
 		}
+		
+		
 		if (!isset($_POST['formsent']) || count($errorArray))
 		{
+
+			if (isset($errorArray) && count($errorArray) > 0)
+			{
+					// we have errors, we need to print them. List format is probably good
+			?>
+			<div class="error">
+				<strong>There Were Errors in Your Post</strong>
+				<ul>
+				<?php
+					
+				foreach($errorArray as $error)
+				{
+					echo '<li>'.$error.'<li>';
+				}
+				?>
+				</ul>
+			</div>
+			<?php
+				// end the error printing
+			}
 			?>
 			<div class="catrow">
 				Post Reply
@@ -212,30 +242,10 @@ class topicReply extends tDisplay
 			<div class="contentbox">
 			
 				<div class="postBox">
-					<?php
-					if (isset($errorArray) && count($errorArray) > 0)
-					{
-							// we have errors, we need to print them. List format is probably good
-					?>
-					<div class="error">
-						<strong>There Were Errors in Your Post</strong>
-						<ul>
-						<?php
-							
-						foreach($errorArray as $error)
-						{
-							echo '<li>'.$error.'<li>';
-						}
-						?>
-						</ul>
-					</div>
-					<?php
-						// end the error printing
-					}
-					?>
+					
 					<form action="?act=topicReply&amp;id=<?php echo $_GET['id']?>" method="post" >
 						<p>
-							<?php secureForm(); ?>
+							<?php secureForm("topicReply"); ?>
 							<input type="hidden" name="formsent" value="1" />
 							Message:<br />
 							<div class="postArea">

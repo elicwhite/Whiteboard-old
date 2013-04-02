@@ -35,7 +35,7 @@ require_once('install.php');
 $errors = array();
 
 // Check if form is CSRF protected and was sent
-if (isSecureForm() && isset($_POST['formsent']) && $_POST['formsent'] == "1")
+if (isSecureForm("step1") && isset($_POST['formsent']) && $_POST['formsent'] == "1")
 {
 	// validate form	
 	$install = new Installer();
@@ -89,7 +89,7 @@ if (count($errors) > 0)
 					<strong>MySQL Host</strong>
 				</td>
 				<td class="input">
-					<?php secureForm(); ?>
+					<?php secureForm("step1"); ?>
 					<input type="hidden" name="formsent" value="1" />
 					<input type="text" name="dbhost" />
 				</td>

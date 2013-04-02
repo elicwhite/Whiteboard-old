@@ -12,7 +12,7 @@
 					<strong>Site Name</strong>
 				</td>
 				<td class="input">
-					<?php secureForm(); ?>
+					<?php secureForm("editForum"); ?>
 					<input type="hidden" name="post" value="update" />
 					<input class="text" type="text" value="<?php echo $this->SiteName?>" name="site_name" />
 				</td>

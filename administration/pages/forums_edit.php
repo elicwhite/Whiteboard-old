@@ -74,7 +74,7 @@ class ForumsEdit extends adminSub
 	
 			echo $edit->parse();
 		}
-		elseif(isset($_POST['post']) && $_POST['post'] == 'form' && isSecureForm() && $this->fhelper->edit())
+		elseif(isset($_POST['post']) && $_POST['post'] == 'form' && isSecureForm("editForum") && $this->fhelper->edit())
 		{
 			$success = new tpl(ROOT_PATH.'administration/display/templates/success_redir.php');
 			$success->add("message","Forum Updated Successfully!");

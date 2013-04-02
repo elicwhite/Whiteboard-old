@@ -52,12 +52,12 @@ function encrypt_password($password)
  * @param boolean $return true if you want it to return the input field, false otherwise
  * @return mixed
  */
-function secureForm($return = false)
+function secureForm($formName, $return = false)
 {
 	$hash = encrypt_password(time());
 	$hash = substr($hash, 4, 10);
-	$input = '<input type="hidden" name="formHash" value="'.$hash.'" />';
-	$_SESSION['formHash'] = $hash;
+	$input = '<input type="hidden" name="'.$formName.'Hash" value="'.$hash.'" />';
+	$_SESSION[$formName.'Hash'] = $hash;
 	
 	if ($return)
 		return $input;
@@ -72,19 +72,19 @@ function secureForm($return = false)
  * 
  * @return boolean true if the form was valid, false otherwise
  */
-function isSecureForm()
+function isSecureForm($formName)
 {
 	//echo "ph: ".$_POST['formHash']."<br />";
 	//echo "sh: ".$_SESSION['formHash'];
 	$return = false;
 	
-	if (!isset($_POST['formHash']) || !isset($_SESSION['formHash']))
+	if (!isset($_POST[$formName.'Hash']) || !isset($_SESSION[$formName.'Hash']))
 		return false;
 	
-	if ($_POST['formHash'] == $_SESSION['formHash'])
+	if ($_POST[$formName.'Hash'] == $_SESSION[$formName.'Hash'])
 		$return = true;
 		
-	unset ($_SESSION['formHash']);
+	unset ($_SESSION[$formName.'Hash']);
 	
 	return $return;
 		

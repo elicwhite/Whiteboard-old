@@ -257,7 +257,7 @@ class Calendar extends forumPage
 				else
 					$topicsToday = "";
 					
-				if($perDayArray[$mysqlFormat]["Reply"] > 0)
+				if(isset($perDayArray[$mysqlFormat]["Reply"]) && $perDayArray[$mysqlFormat]["Reply"] > 0)
 				{
 					$plural = plural($perDayArray[$mysqlFormat]["Reply"],true);
 					$postsToday = "<li>".$perDayArray[$mysqlFormat]["Reply"]." Repl".$plural."</li>";
@@ -265,7 +265,7 @@ class Calendar extends forumPage
 				else
 					$postsToday = "";
 					
-				if(key_exists("Users",$perDayArray[$mysqlFormat]) &&  $perDayArray[$mysqlFormat]["Users"] > 0)
+				if(isset($perDayArray[$mysqlFormat]["Users"]) &&  $perDayArray[$mysqlFormat]["Users"] > 0)
 				{
 					$plural = plural($perDayArray[$mysqlFormat]["Users"]);
 					$usersToday = "<li>".$perDayArray[$mysqlFormat]["Users"]." User".$plural."</li>";

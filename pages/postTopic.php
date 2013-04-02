@@ -23,8 +23,9 @@
  Author: SaroSoftware
  Date Created: 3/10/09
  Last Edited By: Eli White
- Last Edited Date: 5/3/09
+ Last Edited Date: 4/18/10
  Latest Changes:
+ 	4/18/09 - Fixed a permissions issue
  	5/3/09 - Topics now post as the person who posted them
 	4/8/09 - Converted to a class that inherits from fDisplay to get
 			the proper breadcrumb behavior and title behavior.
@@ -95,91 +96,121 @@ class postTopic extends fDisplay
 		)
 		{
 			echo $GLOBALS['super']->user->noPerm();
+			return;
 		}
-		elseif (isSecureForm() && isset($_POST['formsent']) && $_POST['formsent'] == "1")
+		
+		if(isset($_POST['formsent']) && $_POST['formsent'] == "1")
 		{
-			// for now, lets ignore preview
-						
-			$subject = $_POST['subject'];
-			$message = $_POST['message'];
-			
-			
-			if (strlen($subject) <= 4 || strlen($subject) > 35)
+			if (isSecureForm("postTopic"))
 			{
-				$errorArray[] = "The subject must be greater than 4 characters and less than 35";
+			
+				// for now, lets ignore preview
+							
+				$subject = $_POST['subject'];
+				$message = $_POST['message'];
+				
+				
+				if (strlen($subject) <= 4 || strlen($subject) > 35)
+				{
+					$errorArray[] = "The subject must be greater than 4 characters and less than 35";
+				}
+				if (strlen($message) <= 10)
+				{
+					$errorArray[] = "The message must be greater than 10 characters";
+				}
+				
+				
+				if (!count($errorArray))
+				{
+					$id = $GLOBALS['super']->db->escape(intval($_GET['id']));
+					$subject = $GLOBALS['super']->db->escape($subject);
+					$message = $GLOBALS['super']->db->escape($message);
+					
+					// for testing purposes, we need to make this dynamic
+					// when we add the user system
+					$posterid = $GLOBALS['super']->user->id; 
+					
+					
+					$addTopicSql = "INSERT INTO ".TBL_PREFIX."topics (
+								`id` ,
+								`name` ,
+								`forum_id` ,
+								`user_id` ,
+								`time_added` ,
+								`time_modified`,
+								`last_user_id`
+								)
+								VALUES (
+								NULL , '".$subject."', '".$id."','".$posterid."', ".time().", ".time().", '".$posterid."'
+								);
+								";
+					$GLOBALS['super']->db->query($addTopicSql);
+					
+					// we need to get the id of the topic we just added, lucky us, a function to do
+					// just that.
+					$topicId = $GLOBALS['super']->db->escape($GLOBALS['super']->db->fetch_lastid());
+					
+					$addPostSql = "INSERT INTO ".TBL_PREFIX."posts (
+								`id` ,
+								`topic_id` ,
+								`user_id` ,
+								`time_added` ,
+								`message`
+								)
+								VALUES (
+								NULL , '".$topicId."', '".$posterid."', ".time().", '".$message."')";
+					
+					$GLOBALS['super']->db->query($addPostSql);
+					
+					$postid = $GLOBALS['super']->db->fetch_lastid();
+					
+					// We need to update the count on the forum this is a child of. Why?
+					//	so we don't have tons of nested queries on the main page. Maybe it would be better
+					// than 3 queries for adding a topic.
+					$updateForumCountSQL = "UPDATE ".TBL_PREFIX."forums SET `topic_count` = `topic_count`+1, `last_post_id` = '".$postid."' WHERE `id` ='".$id."' LIMIT 1";
+					$GLOBALS['super']->db->query($updateForumCountSQL);
+					
+					// We also need to increment a counter on the user table for the number of posts. Are we sure we should be making this many queries here?
+					$updateUsersSQL = "UPDATE ".TBL_PREFIX."users SET `total_topics` = `total_topics`+1 WHERE `id`='".$posterid."'";
+					$GLOBALS['super']->db->query($updateUsersSQL);
+					
+					
+					// we successfully made the topic
+					$success = new tpl(ROOT_PATH.'themes/Default/templates/success_redir.php');
+					$success->add("message","Topic made successfully!");
+					$success->add("url","index.php?act=fdisplay&id=".$id);
+					echo $success->parse();
+					
+				}
 			}
-			if (strlen($message) <= 10)
+			else 
 			{
-				$errorArray[] = "The message must be greater than 10 characters";
-			}
-			
-			
-			if (!count($errorArray))
-			{
-				$id = $GLOBALS['super']->db->escape(intval($_GET['id']));
-				$subject = $GLOBALS['super']->db->escape($subject);
-				$message = $GLOBALS['super']->db->escape($message);
-				
-				// for testing purposes, we need to make this dynamic
-				// when we add the user system
-				$posterid = $GLOBALS['super']->user->id; 
-				
-				
-				$addTopicSql = "INSERT INTO ".TBL_PREFIX."topics (
-							`id` ,
-							`name` ,
-							`forum_id` ,
-							`user_id` ,
-							`time_added` ,
-							`time_modified`,
-							`last_user_id`
-							)
-							VALUES (
-							NULL , '".$subject."', '".$id."','".$posterid."', ".time().", ".time().", '".$posterid."'
-							);
-							";
-				$GLOBALS['super']->db->query($addTopicSql);
-				
-				// we need to get the id of the topic we just added, lucky us, a function to do
-				// just that.
-				$topicId = $GLOBALS['super']->db->escape($GLOBALS['super']->db->fetch_lastid());
-				
-				$addPostSql = "INSERT INTO ".TBL_PREFIX."posts (
-							`id` ,
-							`topic_id` ,
-							`user_id` ,
-							`time_added` ,
-							`message`
-							)
-							VALUES (
-							NULL , '".$topicId."', '".$posterid."', ".time().", '".$message."')";
-				
-				$GLOBALS['super']->db->query($addPostSql);
-				
-				$postid = $GLOBALS['super']->db->fetch_lastid();
-				
-				// We need to update the count on the forum this is a child of. Why?
-				//	so we don't have tons of nested queries on the main page. Maybe it would be better
-				// than 3 queries for adding a topic.
-				$updateForumCountSQL = "UPDATE ".TBL_PREFIX."forums SET `topic_count` = `topic_count`+1, `last_post_id` = '".$postid."' WHERE `id` ='".$id."' LIMIT 1";
-				$GLOBALS['super']->db->query($updateForumCountSQL);
-				
-				// We also need to increment a counter on the user table for the number of posts. Are we sure we should be making this many queries here?
-				$updateUsersSQL = "UPDATE ".TBL_PREFIX."users SET `total_topics` = `total_topics`+1 WHERE `id`='".$posterid."'";
-				$GLOBALS['super']->db->query($updateUsersSQL);
-				
-				
-				// we successfully made the topic
-				$success = new tpl(ROOT_PATH.'themes/Default/templates/success_redir.php');
-				$success->add("message","Topic made successfully!");
-				$success->add("url","index.php?act=fdisplay&id=".$id);
-				echo $success->parse();
-				
+				$errorArray[] = "You cannot attempt to make a different post after this form has been opened.";
 			}
 		}
 		
+		
 		if (!isset($_POST['formsent']) || count($errorArray))
 		{
+			if (isset($errorArray) && count($errorArray))
+			{
+					// we have errors, we need to print them. List format is probably good
+			?>
+			<div class="error">
+				<strong>There Were Errors in Your Topic</strong>
+				<ul>
+				<?php
+					
+				foreach($errorArray as $error)
+				{
+					echo '<li>'.$error.'<li>';
+				}
+				?>
+				</ul>
+			</div>
+			<?php
+				// end the error printing
+			}
 			?>
 			<div class="catrow">
 				Add Topic
@@ -187,30 +218,10 @@ class postTopic extends fDisplay
 			<div class="contentbox">
 			
 				<div class="postBox">
-					<?php
-					if (isset($errorArray) && count($errorArray))
-					{
-							// we have errors, we need to print them. List format is probably good
-					?>
-					<div class="error">
-						<strong>There Were Errors in Your Topic</strong>
-						<ul>
-						<?php
-							
-						foreach($errorArray as $error)
-						{
-							echo '<li>'.$error.'<li>';
-						}
-						?>
-						</ul>
-					</div>
-					<?php
-						// end the error printing
-					}
-					?>
+					
 					<form action="?act=postTopic&amp;id=<?php echo $_GET['id']?>" method="post" >
 						<p>
-							<?php secureForm(); ?>
+							<?php secureForm("postTopic"); ?>
 							<input type="hidden" name="formsent" value="1" />
 							Subject:<br />
 							<input class="text" type="text" name="subject" value="<?php if (isset($subject)) echo $subject ?>" size="40" /><br /><br />

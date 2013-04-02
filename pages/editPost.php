@@ -121,7 +121,6 @@ class editPost extends tDisplay
 		)
 		{
 			echo $GLOBALS['super']->user->noPerm();
-			
 			return;
 			
 		}
@@ -132,41 +131,47 @@ class editPost extends tDisplay
 			$error->add("error_message", "You have reached this page in error.<br />Please go back and try again.");
 			echo $error->parse();
 		}
-		else if (isSecureForm() && isset($_POST['formsent']) && $_POST['formsent'] == "1")
+		if(isset($_POST['formsent']) && $_POST['formsent'] == "1")
 		{
-
-			// for now, lets ignore preview
-			
-			
-			
-			$message = $_POST['message'];
-			
-		
-			if (strlen($message) <= 10)
+			if (isSecureForm("editPost"))
 			{
-				$errorArray[] = "The message must be greater than 10 characters";
+			
+			
+				
+				$message = $_POST['message'];
+				
+			
+				if (strlen($message) <= 10)
+				{
+					$errorArray[] = "The message must be greater than 10 characters";
+				}
+				
+				if (!count($errorArray))
+				{
+					
+					$postId = $GLOBALS['super']->db->escape(intval($this->currentPost['id']));
+					$message = $GLOBALS['super']->db->escape(htmlentities($message));
+					
+					$posterid = $GLOBALS['super']->user->id; 
+					
+					// Edit the post
+					$updatePost = "UPDATE ".TBL_PREFIX."posts SET `message`='".$message."', `last_edited`='".time()."' WHERE `id`=".$postId;
+					$GLOBALS['super']->db->query($updatePost);
+					
+					// we successfully made the post
+					$success = new tpl(ROOT_PATH.'themes/Default/templates/success_redir.php');
+					$success->add("message","Post Edited Successfully!");
+					$success->add("url","index.php?act=tdisplay&id=".$this->currentPost['topic_id']);
+					echo $success->parse();
+				}	
 			}
-			
-			if (!count($errorArray))
+			else 
 			{
-				
-				$postId = $GLOBALS['super']->db->escape(intval($this->currentPost['id']));
-				$message = $GLOBALS['super']->db->escape(htmlentities($message));
-				
-				$posterid = $GLOBALS['super']->user->id; 
-				
-				// Edit the post
-				$updatePost = "UPDATE ".TBL_PREFIX."posts SET `message`='".$message."', `last_edited`='".time()."' WHERE `id`=".$postId;
-				$GLOBALS['super']->db->query($updatePost);
-				
-				// we successfully made the post
-				$success = new tpl(ROOT_PATH.'themes/Default/templates/success_redir.php');
-				$success->add("message","Post Edited Successfully!");
-				$success->add("url","index.php?act=tdisplay&id=".$this->currentPost['topic_id']);
-				echo $success->parse();
-				
+				$errorArray[] = "You cannot attempt to make a different post after this form has been opened.";
 			}
 		}
+		
+		
 		if (!isset($_POST['formsent']) || count($errorArray))
 		{
 			

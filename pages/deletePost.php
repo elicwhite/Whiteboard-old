@@ -118,7 +118,6 @@ class deletePost extends tDisplay
 		)
 		{
 			echo $GLOBALS['super']->user->noPerm();
-			
 			return;
 			
 		}
@@ -129,7 +128,7 @@ class deletePost extends tDisplay
 			$error->add("error_message", "You have reached this page in error.<br />Please go back and try again.");
 			echo $error->parse();
 		}
-		else if (isSecureForm() && isset($_POST['formsent']) && $_POST['formsent'] == "1")
+		else if (isSecureForm("deletePost") && isset($_POST['formsent']) && $_POST['formsent'] == "1")
 		{
 
 			// for now, lets ignore preview
@@ -138,35 +137,66 @@ class deletePost extends tDisplay
 			// go ahead and submit, otherwise we need to print them all to the user
 			$errorArray = array();
 			
+			$isFirst = false;
 			
 			$postId = $GLOBALS['super']->db->escape(intval($this->currentPost['id']));
 			
 			// Check if it is the first post of the topic
-			//$query = $GLOBALS['super']->db->query("SELECT `id` FROM ".TBL_PREFIX."posts WHERE `topic_id`=".$this->currentTopic['id']." ORDER BY `time_added` ASC LIMIT 1");
-			//$result = $GLOBALS['super']->db->fetch_result($query);
-
-			// Delete the post
-			$GLOBALS['super']->db->query("DELETE FROM ".TBL_PREFIX."posts WHERE `id`=".$this->currentPost['id']);	
-			
-			// We need to get the last post in the forum. We may have deleted it.
-			$lastPost = $GLOBALS['super']->db->query("SELECT p.id FROM ".TBL_PREFIX."posts AS p INNER JOIN ".TBL_PREFIX."topics AS t ON p.topic_id=t.id INNER JOIN ".TBL_PREFIX."forums AS f ON t.forum_id = f.id WHERE f.id=".$this->currentForum['id']." ORDER BY p.time_added DESC LIMIT 1");
-			$lastPost = $GLOBALS['super']->db->fetch_result($lastPost);
-			
-			// Update the last post field in forums
-			$GLOBALS['super']->db->query("UPDATE ".TBL_PREFIX."forums SET `last_post_id`=".$lastPost.", `post_count`=".($this->currentForum['post_count']-1) ." WHERE `id`=".$this->currentForum['id']);
-			
-			// Get the new last user in the topic
-			$lastUser = $GLOBALS['super']->db->query("SELECT u.id FROM ".TBL_PREFIX."users AS u INNER JOIN ".TBL_PREFIX."posts AS p ON p.user_id = u.id INNER JOIN ".TBL_PREFIX."topics AS t ON p.topic_id = t.id WHERE t.id=".$this->currentTopic['id']." ORDER BY p.time_added DESC LIMIT 1");
-			$lastUser = $GLOBALS['super']->db->fetch_result($lastUser);
-			
-			$GLOBALS['super']->db->query("UPDATE ".TBL_PREFIX."topics SET `last_user_id`=".$lastUser.", `post_count`=".($this->currentTopic['post_count']-1) ." WHERE `id`=".$this->currentTopic['id']);
-			
+			$query = $GLOBALS['super']->db->query("SELECT count(`id`) FROM ".TBL_PREFIX."posts WHERE `topic_id`=".$this->currentTopic['id']);
+			$result = $GLOBALS['super']->db->fetch_result($query);
+			if ($result == 1)
+			{
+				$isFirst = true;
+				// We are deleting a topic
+				/**
+				 * This is just grabbed from the DeleteTopic page. This needs to be redone,
+				 * maybe we can make a helper class
+				 */
+				// Delete the topic
+				$query = $GLOBALS['super']->db->query("DELETE FROM ".TBL_PREFIX."topics WHERE `id`=".$this->currentTopic['id']);
+				
+				// We need to get the last post in the forum. We may have deleted it.
+				$lastPost = $GLOBALS['super']->db->query("SELECT p.id FROM ".TBL_PREFIX."posts AS p INNER JOIN ".TBL_PREFIX."topics AS t ON p.topic_id=t.id INNER JOIN ".TBL_PREFIX."forums AS f ON t.forum_id = f.id WHERE f.id=".$this->currentForum['id']." ORDER BY p.time_added DESC LIMIT 1");
+				
+				// If we have more posts
+				if ($GLOBALS['super']->db->getRowCount($lastPost) > 0)
+					$lastPost = $GLOBALS['super']->db->fetch_result($lastPost);
+				else 
+				{
+					// otherwise there are no more posts in this forum
+					$lastPost = 0;
+				}
+				
+				
+				// Update the last post field in forums
+				$GLOBALS['super']->db->query("UPDATE ".TBL_PREFIX."forums SET `last_post_id`=".$lastPost.", `topic_count` = ".($this->currentForum['topic_count']-1) .", `post_count`=".($this->currentForum['post_count']-$this->currentTopic['post_count'])."  WHERE `id`=".$this->currentForum['id']);
+			}
+			else 
+			{
+				// We are deleting a single post
+				$isFirst = false;
+				// Delete the post
+				$GLOBALS['super']->db->query("DELETE FROM ".TBL_PREFIX."posts WHERE `id`=".$this->currentPost['id']);	
+				
+				// We need to get the last post in the forum. We may have deleted it.
+				$lastPost = $GLOBALS['super']->db->query("SELECT p.id FROM ".TBL_PREFIX."posts AS p INNER JOIN ".TBL_PREFIX."topics AS t ON p.topic_id=t.id INNER JOIN ".TBL_PREFIX."forums AS f ON t.forum_id = f.id WHERE f.id=".$this->currentForum['id']." ORDER BY p.time_added DESC LIMIT 1");
+				$lastPost = $GLOBALS['super']->db->fetch_result($lastPost);
+				
+				// Update the last post field in forums
+				$GLOBALS['super']->db->query("UPDATE ".TBL_PREFIX."forums SET `last_post_id`=".$lastPost.", `post_count`=".($this->currentForum['post_count']-1) ." WHERE `id`=".$this->currentForum['id']);
+				
+				// Get the new last user in the topic
+				$lastUser = $GLOBALS['super']->db->query("SELECT u.id FROM ".TBL_PREFIX."users AS u INNER JOIN ".TBL_PREFIX."posts AS p ON p.user_id = u.id INNER JOIN ".TBL_PREFIX."topics AS t ON p.topic_id = t.id WHERE t.id=".$this->currentTopic['id']." ORDER BY p.time_added DESC LIMIT 1");
+				$lastUser = $GLOBALS['super']->db->fetch_result($lastUser);
+				
+				$GLOBALS['super']->db->query("UPDATE ".TBL_PREFIX."topics SET `last_user_id`=".$lastUser.", `post_count`=".($this->currentTopic['post_count']-1) ." WHERE `id`=".$this->currentTopic['id']);
+			}
 			// we successfully made the post
 			$success = new tpl(ROOT_PATH.'themes/Default/templates/success_redir.php');
 			$success->add("message","Post Deleted Successfully!");
-			//if ($isFirst)
-				//$url = "index.php?act=fdisplay&id=".$this->currentTopic['forum_id'];
-			//else 
+			if ($isFirst)
+				$url = "index.php?act=fdisplay&id=".$this->currentTopic['forum_id'];
+			else 
 				$url = "index.php?act=tdisplay&id=".$this->currentPost['topic_id'];
 
 			$success->add("url",$url);
@@ -188,14 +218,6 @@ class deletePost extends tDisplay
 		$output = ob_get_contents();
 		ob_end_clean();
 		return $output;
-	}
-
-	public function isFirst()
-	{
-		$query = $GLOBALS['super']->db->query("SELECT `id` FROM ".TBL_PREFIX."posts WHERE `topic_id`=".$this->currentTopic['id']." ORDER BY `time_added` ASC LIMIT 1");
-		$result = $GLOBALS['super']->db->fetch_result($query);
-		
-		return $result == $this->currentPost['id'];
 	}
 }
 ?>

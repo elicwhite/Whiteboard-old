@@ -61,7 +61,7 @@ class ForumsAdd extends adminSub
 		
 		if(isset($_POST['post']) && $_POST['post'] == 'form')
 		{
-			if(isSecureForm() && $this->fhelper->add())
+			if(isSecureForm("addForum") && $this->fhelper->add())
 			{
 				$success = new tpl(ROOT_PATH.'administration/display/templates/success_redir.php');
 				$success->add("message","Forum Added Successfully!");

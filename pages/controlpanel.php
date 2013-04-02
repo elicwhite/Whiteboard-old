@@ -123,7 +123,7 @@ class ControlPanel extends forumPage
 			$errors = null;
 			
 			// If a form has been submitted
-			if (isset($_POST['submit']) && $_POST['submit'] == "Submit" && isSecureForm())
+			if (isset($_POST['submit']) && $_POST['submit'] == "Submit" && isSecureForm("controlPanel"))
 			{
 				$errors = $this->validateForm();
 			}

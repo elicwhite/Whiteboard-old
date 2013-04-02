@@ -117,56 +117,88 @@ class Profile extends forumPage
 		
 		$bbCode = new bbCode();
 		
+		// Start our template so we can add variables to it
+		$tpl = new tpl(ROOT_PATH.'themes/Default/templates/profile.php');
 		
-		// We need to get the number of topics
-		$topics = "SELECT count(`id`) FROM ".TBL_PREFIX."topics WHERE `user_id`=".$this->currentUser['id'];
-		$topics = $GLOBALS['super']->db->query($topics);
-		$topics = $GLOBALS['super']->db->fetch_result($topics);
 		
-		$totalTopics = $GLOBALS['super']->db->fetch_result($GLOBALS['super']->db->query("SELECT count(`id`) FROM ".TBL_PREFIX."topics"));
-		$topicPercent = round(($topics/$totalTopics)*100,2);
-		
-		// We need to get the number of posts
+		// Fetch the total number of posts
 		$posts = "SELECT count(`id`) FROM ".TBL_PREFIX."posts WHERE `user_id`=".$this->currentUser['id'];
 		$posts = $GLOBALS['super']->db->query($posts);
-		$posts = $GLOBALS['super']->db->fetch_result($posts) - $topics;
+		$posts = $GLOBALS['super']->db->fetch_result($posts);
 		
-		$totalPosts = $GLOBALS['super']->db->fetch_result($GLOBALS['super']->db->query("SELECT count(`id`) FROM ".TBL_PREFIX."posts")) - $totalTopics;
-		
-		// If we have no posts at all on the forum, pretend like we have 1
-		$totalPosts = max(1, $totalPosts);
-		
-		$postPercent = round(($posts/$totalPosts)*100,2);
-		
-		$daysSinceRegister = time()-$this->currentUser['time_added'];
-		$daysSinceRegister = $daysSinceRegister / (60 * 60 * 24); // seconds * minutes * hours = 1 day
-		// set to whole days
-		$daysSinceRegister = ceil($daysSinceRegister);
-		
-		$postsPerDay = round($posts/$daysSinceRegister,1);
-		$topicsPerDay = round($topics/$daysSinceRegister,1);
-		
-		// We want to find the topic that we replied to the most, it is
-		// designated as our "favorite" because we are most active in it
-		
-		// we subtract 1 from the count so we don't count the original topic
-		// BUT IN THE CASE WHERE WE DIDNT MAKE THE TOPIC, THIS IS WRONG!
-		$favoriteTopic = 'SELECT count(p.id) as Count, p.topic_id, t.name, t.user_id FROM '.TBL_PREFIX.'posts AS p INNER JOIN '.TBL_PREFIX.'topics AS t ON p.topic_id=t.id WHERE p.user_id='.$this->currentUser['id'].' GROUP BY p.topic_id ORDER BY Count DESC LIMIT 1';
-		$favoriteTopic = $GLOBALS['super']->db->query($favoriteTopic);
-		$favoriteTopic = $GLOBALS['super']->db->fetch_assoc($favoriteTopic);
-		
-		$biggestTopic = 'SELECT * FROM '.TBL_PREFIX.'topics WHERE `user_id`='.$this->currentUser['id'].' ORDER BY `post_count` DESC LIMIT 1';
-		$biggestTopic = $GLOBALS['super']->db->query($biggestTopic);
-		$biggestTopic = $GLOBALS['super']->db->fetch_assoc($biggestTopic);
-		// add one to count the original topic's message
-		$biggestCount = $biggestTopic['post_count']+1;
-		
-		$lastPost = 'SELECT p.*, t.name AS topicName FROM '.TBL_PREFIX.'posts AS p INNER JOIN '.TBL_PREFIX.'topics AS t ON p.topic_id=t.id WHERE p.user_id='.$this->currentUser['id'].' ORDER BY p.time_added DESC LIMIT 1';
-		$lastPost = $GLOBALS['super']->db->query($lastPost);
-		$lastPost = $GLOBALS['super']->db->fetch_assoc($lastPost);
-		
-		$lastPostDate = $GLOBALS['super']->functions->formatDate($lastPost['time_added']);
-		
+		// We can only get the other statistics if this user has made posts
+		if (!$posts)
+		{
+			$tpl->add("noActivity", true);
+		}
+		else
+		{
+			$tpl->add("noActivity",false);
+			
+			// We need to get the number of topics
+			$topics = "SELECT count(`id`) FROM ".TBL_PREFIX."topics WHERE `user_id`=".$this->currentUser['id'];
+			$topics = $GLOBALS['super']->db->query($topics);
+			$topics = $GLOBALS['super']->db->fetch_result($topics);
+			$tpl->add("TopicCount", $topics);
+			
+			
+			$totalTopics = $GLOBALS['super']->db->fetch_result($GLOBALS['super']->db->query("SELECT count(`id`) FROM ".TBL_PREFIX."topics"));
+			$topicPercent = round(($topics/$totalTopics)*100,2);
+			$tpl->add("TopicPercent", $topicPercent);
+			
+			
+			// Each topic makes a post, we only want posts that aren't the first in a topic
+			$numPosts = $posts - $topics;
+			$tpl->add("PostCount", $numPosts);
+			
+			$totalPosts = $GLOBALS['super']->db->fetch_result($GLOBALS['super']->db->query("SELECT count(`id`) FROM ".TBL_PREFIX."posts")) - $totalTopics;
+			
+			// If we have no posts at all on the forum, pretend like we have 1
+			$totalPosts = max(1, $totalPosts);
+			
+			$postPercent = round(($posts/$totalPosts)*100,2);
+			$tpl->add("PostPercent", $postPercent);
+			
+			$daysSinceRegister = time()-$this->currentUser['time_added'];
+			$daysSinceRegister = $daysSinceRegister / (60 * 60 * 24); // seconds * minutes * hours = 1 day
+			// set to whole days
+			$daysSinceRegister = ceil($daysSinceRegister);
+			
+			$postsPerDay = round($posts/$daysSinceRegister,1);
+			$tpl->add("PostsPerDay", $postsPerDay);
+			
+			$topicsPerDay = round($topics/$daysSinceRegister,1);
+			$tpl->add("TopicsPerDay", $topicsPerDay);
+			
+			// We want to find the topic that we replied to the most, it is
+			// designated as our "favorite" because we are most active in it
+			
+			// we subtract 1 from the count so we don't count the original topic
+			// BUT IN THE CASE WHERE WE DIDNT MAKE THE TOPIC, THIS IS WRONG!
+			$favoriteTopic = 'SELECT count(p.id) as Count, p.topic_id, t.name, t.user_id FROM '.TBL_PREFIX.'posts AS p INNER JOIN '.TBL_PREFIX.'topics AS t ON p.topic_id=t.id WHERE p.user_id='.$this->currentUser['id'].' GROUP BY p.topic_id ORDER BY Count DESC LIMIT 1';
+			$favoriteTopic = $GLOBALS['super']->db->query($favoriteTopic);
+			$favoriteTopic = $GLOBALS['super']->db->fetch_assoc($favoriteTopic);
+			$tpl->add("FavoriteTopic", $favoriteTopic);
+			
+			$biggestTopic = 'SELECT * FROM '.TBL_PREFIX.'topics WHERE `user_id`='.$this->currentUser['id'].' ORDER BY `post_count` DESC LIMIT 1';
+			$biggestTopic = $GLOBALS['super']->db->query($biggestTopic);
+			$biggestTopic = $GLOBALS['super']->db->fetch_assoc($biggestTopic);
+			$tpl->add("BiggestTopic", $biggestTopic);
+			
+			
+			// add one to count the original topic's message
+			$biggestCount = $biggestTopic['post_count']+1;
+			$tpl->add("BiggestCount", $biggestCount);
+			
+			
+			$lastPost = 'SELECT p.*, t.name AS topicName FROM '.TBL_PREFIX.'posts AS p INNER JOIN '.TBL_PREFIX.'topics AS t ON p.topic_id=t.id WHERE p.user_id='.$this->currentUser['id'].' ORDER BY p.time_added DESC LIMIT 1';
+			$lastPost = $GLOBALS['super']->db->query($lastPost);
+			$lastPost = $GLOBALS['super']->db->fetch_assoc($lastPost);
+			$tpl->add("LastPost", $lastPost);
+			
+			$lastPostDate = $GLOBALS['super']->functions->formatDate($lastPost['time_added']);
+			$tpl->add("LastPostDate", $lastPostDate);
+		}
 		$avatar = $GLOBALS['super']->functions->getImage($this->currentUser['avatar']);
 		$signature = $bbCode->parse($this->currentUser['signature']);
 		// We want to know what page this user is currently on. Check if they
@@ -229,22 +261,12 @@ class Profile extends forumPage
 		else 
 			$page = "Offline";
 		
-		$tpl = new tpl(ROOT_PATH.'themes/Default/templates/profile.php');
+		
 		$tpl->add("UserName", $this->userName2Display);
 		$tpl->add("Avatar", $avatar);
 		$tpl->add("currentUser", $this->currentUser);
 		$tpl->add("Page", $page);
-		$tpl->add("TopicCount", $topics);
-		$tpl->add("TopicPercent", $topicPercent);
-		$tpl->add("PostCount", $posts);
-		$tpl->add("PostPercent", $postPercent);
-		$tpl->add("TopicsPerDay", $topicsPerDay);
-		$tpl->add("PostsPerDay", $postsPerDay);
-		$tpl->add("FavoriteTopic", $favoriteTopic);
-		$tpl->add("BiggestCount", $biggestCount);
-		$tpl->add("BiggestTopic", $biggestTopic);
-		$tpl->add("LastPost", $lastPost);
-		$tpl->add("LastPostDate", $lastPostDate);
+		
 		$tpl->add("Personal", $personal);
 		$tpl->add("Signature", $signature);
 		$tpl->parse();

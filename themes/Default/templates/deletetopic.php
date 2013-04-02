@@ -7,7 +7,7 @@
 		Are you sure you want to delete the topic: <?php echo $this->topicName ?><br /><br />
 		<form action="?act=deleteTopic&amp;id=<?php echo $_GET['id']?>" method="post">
 			<p>
-				<?php secureForm(); ?>
+				<?php secureForm("deleteTopic"); ?>
 				<input type="hidden" name="formsent" value="1" />
 				<input type="submit" class="button" name="submit" value="Delete Topic" />
 			</p>

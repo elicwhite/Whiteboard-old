@@ -101,11 +101,10 @@ class deleteTopic extends tDisplay
 		)
 		{
 			echo $GLOBALS['super']->user->noPerm();
-			
 			return;
 			
 		}
-		else if (isSecureForm() && isset($_POST['formsent']) && $_POST['formsent'] == "1")
+		else if (isSecureForm("deleteTopic") && isset($_POST['formsent']) && $_POST['formsent'] == "1")
 		{
 
 			// Delete the topic

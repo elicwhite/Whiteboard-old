@@ -1,33 +1,32 @@
+<?php
+if (isset($this->errorArray) && count($this->errorArray) > 0)
+{
+		// we have errors, we need to print them. List format is probably good
+?>
+<div class="error">
+	<strong>There Were Errors in Your Post</strong>
+	<ul>
+	<?php
+		
+	foreach($this->errorArray as $error)
+	{
+		echo '<li>'.$error.'<li>';
+	}
+	?>
+	</ul>
+</div>
+<?php
+	// end the error printing
+}
+?>
 <div class="catrow">
 	Edit Post in: <?php echo $this->topicName?>
 </div>
 <div class="contentbox">
-
 	<div class="postBox">
-		<?php
-		if (isset($this->errorArray) && count($this->errorArray) > 0)
-		{
-				// we have errors, we need to print them. List format is probably good
-		?>
-		<div class="error">
-			<strong>There Were Errors in Your Post</strong>
-			<ul>
-			<?php
-				
-			foreach($this->errorArray as $error)
-			{
-				echo '<li>'.$error.'<li>';
-			}
-			?>
-			</ul>
-		</div>
-		<?php
-			// end the error printing
-		}
-		?>
 		<form action="?act=editPost&amp;id=<?php echo $_GET['id']?>" method="post" >
 			<p>
-				<?php secureForm(); ?>
+				<?php secureForm("editPost"); ?>
 				<input type="hidden" name="formsent" value="1" />
 				Message:<br />
 				<div class="postArea">

@@ -150,6 +150,7 @@ class fDisplay extends forumPage
 		if (!$GLOBALS['super']->user->can("ViewBoard") || !$GLOBALS['super']->user->can("Forum".$this->currentForum['id'], "View"))
 		{
 			echo $GLOBALS['super']->user->noPerm();
+			return;
 		}
 		else
 		{

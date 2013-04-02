@@ -25,109 +25,125 @@
 	
 	<div class="profileright">
 		<div class="catrow">Forum Activity</div>
-		<div class="contentbox">
-			<table class="info">
-				<?php
-				if ($this->TopicCount > 0)
-				{
+			<?php
+			if ($this->noActivity)
+			{
 				?>
-				<tr>
-					<td class="info">
-						<strong>Number Of Topics</strong><br />
-						(% of Total Board Topics)
-					</td>
-					<td class="input">
-						<?php echo $this->TopicCount?> - (<?php echo $this->TopicPercent ?>%)<br />
-						<!--<a>Find all Topics by <?php echo $this->UserName?></a>-->
-					</td>
-				</tr>
+				<div class="foruminfo_box">
+				<?php echo ucfirst($this->UserName)?> has had no activity on the board yet.
+				</div>
 				<?php
-				}
-				if ($this->PostCount > 0)
-				{
+			}
+			else 
+			{
 				?>
-				<tr>
-					<td class="info">
-						<strong>Number of Replies</strong><br />
-						(% of Total Board Replies)
-					</td>
-					<td class="input">
-						<?php echo $this->PostCount ?> - (<?php echo $this->PostPercent?>%)<br />
-						<!--<a>Find all Replies by <?php echo $this->UserName?></a>-->
-					</td>
-				</tr>
-				<?php
-				}
-				if ($this->TopicCount > 0)
-				{
-				?>
-				<tr>
-					<td class="info">
-						<strong>Topics Per Day</strong>
-					</td>
-					<td class="input">
-						<?php echo $this->TopicsPerDay?>
-					</td>
-				</tr>
-				<?php
-				}
-				if ($this->PostCount > 0)
-				{
-					?>
-				<tr>
-					<td class="info">
-						<strong>Posts Per Day</strong>
-					</td>
-					<td class="input">
-						<?php echo $this->PostsPerDay?>
-					</td>
-				</tr>
-				<?php
-				}
-				if ($this->TopicCount > 0 || $this->PostCount >0)
-				{
-				?>
-				<tr>
-					<td class="info">
-						<strong>Favorite Topic</strong><br />
-						Topic Most Active in
-					</td>
-					<td class="input">
-						<a href="<?php echo FORUM_ROOT?>index.php?act=tdisplay&amp;id=<?php echo $this->FavoriteTopic['topic_id']?>"><?php echo $this->FavoriteTopic['name'] ?></a> - (<?php echo $this->FavoriteTopic['Count']?> Messages)
-					</td>
-				</tr>
-				<?php
-				}
-				if ($this->BiggestCount > 0)
-				{
-				?>
-				<tr>
-					<td class="info">
-						<strong>Biggest Topic</strong><br />
-						Largest Topic Started
-					</td>
-					<td class="input">
-						<a href="<?php echo FORUM_ROOT?>index.php?act=tdisplay&amp;id=<?php echo $this->BiggestTopic['id']?>"><?php echo $this->BiggestTopic['name']?></a> - (<?php echo $this->BiggestCount?> Messages)
-					</td>
-				</tr>
-				<?php
-				}
-				if ($this->TopicCount || $this->PostCount > 0)
-				{
-				?>
-				<tr>
-					<td class="info">
-						<strong>Latest Post</strong>
-					</td>
-					<td class="input">
-						<a href="<?php echo FORUM_ROOT?>index.php?act=tdisplay&amp;id=<?php echo $this->LastPost['topic_id']?>&amp;page=last"><?php echo $this->LastPost['topicName']?></a> - <?php echo $this->LastPostDate?>
-					</td>
-				</tr>
-				<?php
-				}
-				?>
-			</table>
-		</div>
+				<div class="contentbox">
+					<table class="info">
+						<?php
+						if ($this->TopicCount > 0)
+						{
+						?>
+						<tr>
+							<td class="info">
+								<strong>Number Of Topics</strong><br />
+								(% of Total Board Topics)
+							</td>
+							<td class="input">
+								<?php echo $this->TopicCount?> - (<?php echo $this->TopicPercent ?>%)<br />
+								<!--<a>Find all Topics by <?php echo $this->UserName?></a>-->
+							</td>
+						</tr>
+						<?php
+						}
+						if ($this->PostCount > 0)
+						{
+						?>
+						<tr>
+							<td class="info">
+								<strong>Number of Replies</strong><br />
+								(% of Total Board Replies)
+							</td>
+							<td class="input">
+								<?php echo $this->PostCount ?> - (<?php echo $this->PostPercent?>%)<br />
+								<!--<a>Find all Replies by <?php echo $this->UserName?></a>-->
+							</td>
+						</tr>
+						<?php
+						}
+						if ($this->TopicCount > 0)
+						{
+						?>
+						<tr>
+							<td class="info">
+								<strong>Topics Per Day</strong>
+							</td>
+							<td class="input">
+								<?php echo $this->TopicsPerDay?>
+							</td>
+						</tr>
+						<?php
+						}
+						if ($this->PostCount > 0)
+						{
+							?>
+						<tr>
+							<td class="info">
+								<strong>Posts Per Day</strong>
+							</td>
+							<td class="input">
+								<?php echo $this->PostsPerDay?>
+							</td>
+						</tr>
+						<?php
+						}
+						if ($this->TopicCount > 0 || $this->PostCount >0)
+						{
+						?>
+						<tr>
+							<td class="info">
+								<strong>Favorite Topic</strong><br />
+								Topic Most Active in
+							</td>
+							<td class="input">
+								<a href="<?php echo FORUM_ROOT?>index.php?act=tdisplay&amp;id=<?php echo $this->FavoriteTopic['topic_id']?>"><?php echo $this->FavoriteTopic['name'] ?></a> - (<?php echo $this->FavoriteTopic['Count']?> Messages)
+							</td>
+						</tr>
+						<?php
+						}
+						if ($this->BiggestCount > 0)
+						{
+						?>
+						<tr>
+							<td class="info">
+								<strong>Biggest Topic</strong><br />
+								Largest Topic Started
+							</td>
+							<td class="input">
+								<a href="<?php echo FORUM_ROOT?>index.php?act=tdisplay&amp;id=<?php echo $this->BiggestTopic['id']?>"><?php echo $this->BiggestTopic['name']?></a> - (<?php echo $this->BiggestCount?> Messages)
+							</td>
+						</tr>
+						<?php
+						}
+						if ($this->TopicCount || $this->PostCount > 0)
+						{
+						?>
+						<tr>
+							<td class="info">
+								<strong>Latest Post</strong>
+							</td>
+							<td class="input">
+								<a href="<?php echo FORUM_ROOT?>index.php?act=tdisplay&amp;id=<?php echo $this->LastPost['topic_id']?>&amp;page=last"><?php echo $this->LastPost['topicName']?></a> - <?php echo $this->LastPostDate?>
+							</td>
+						</tr>
+						<?php
+						}
+						?>
+					</table>
+				</div>
+			<?php
+			}
+			?>
+		
 		
 		<?php
 		if (count($this->Personal) > 0)

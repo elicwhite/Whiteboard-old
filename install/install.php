@@ -216,7 +216,7 @@ define("TIMEZONENUM", "-7");
 	$queries[] = 
 	"INSERT INTO ".TBL_PREFIX."config (`name`, `value`, `readonly`, `description`, `group`, `time_modified`) VALUES
 	('siteName', '".$forumname."', '0', 'The name of the website to appear in the titlebar, and at the start of breadcrumbs.', 'general', ".$timestamp."),
-	('forumVersion', '.1.11', '1', 'The version of the forum system', 'general', ".$timestamp."),
+	('forumVersion', '.1.17', '1', 'The version of the forum system', 'general', ".$timestamp."),
 	('defaultTheme', '1', '0', 'The default theme to use for the forum', 'general', ".$timestamp."),
 	('crumbSeperator', '&raquo;', '0', 'The seperator used in the breadcrumbs', 'general', ".$timestamp."),
 	('timeZone', 'America/Los_Angeles', '0', 'The default timezone for the board to use.', 'general', ".$timestamp."),
@@ -289,7 +289,7 @@ define("TIMEZONENUM", "-7");
 	
 	$queries[] =
 	"INSERT INTO ".TBL_PREFIX."images (`name`, `url`) VALUES
-	('Avatar', '".FORUM_ROOT."images/avatar_1.jpg');
+	('Avatar', '".FORUM_ROOT."images/avatar_1.png');
 	";
 	
 	
