@@ -1,6 +1,6 @@
 		</div>
 		<div id="copyright">
-			Powered By WhiteBoard V.1 Alpha<br />
+			Powered By WhiteBoard .1.17 <br />
 			&copy; SaroSoftware<br />
 			All Rights Reserved
 		</div>

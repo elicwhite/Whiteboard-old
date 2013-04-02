@@ -1,19 +1,19 @@
 <?php
 /**
  * Copyright Eli White & SaroSoftware 2010
- * 
+ *
  * This file is part of WhiteBoard.
- * 
+ *
  * WhiteBoard is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * WhiteBoard is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with WhiteBoard.  If not, see <http://www.gnu.org/licenses/>.
  *
@@ -37,19 +37,19 @@ $errors = array();
 // Check if form is CSRF protected and was sent
 if (isSecureForm("step1") && isset($_POST['formsent']) && $_POST['formsent'] == "1")
 {
-	// validate form	
+	// validate form
 	$install = new Installer();
 	if (!$install->install())
 	{
 		// We've got errors
 		$errors = $install->errors;
 	}
-	else 
+	else
 	{
 		// we have no errors
 		header('Location: page2.php');
 	}
-	
+
 }
 ?>
 <div class="mainheaderbox">
@@ -149,7 +149,6 @@ if (count($errors) > 0)
 			<tr>
 				<td class="info">
 					<strong>Admin Password</strong><br />
-					The theme you want this forum and it's sub forums to use.
 				</td>
 				<td class="input">
 					<input type="password" name="password" />
@@ -177,15 +176,15 @@ if (count($errors) > 0)
 			<tr>
 				<td class="info">
 					<strong>Forum URL</strong><br />
-					The full url to the forum folder with a trailing slash. Ex: http://dev.powerwd.net/forum/
+					The full url to the forum folder with a trailing slash. Ex: http://sarosoftware.com/forum/
 				</td>
 				<td class="input">
 					<input type="text" name="root" value="" />
 				</td>
 			</tr>
 		</table>
-		
-	
+
+
 	</div>
 	<input class="submit" type="submit" value="Install!" /> <input class="submit" type="reset" value="Reset" />
 </form>

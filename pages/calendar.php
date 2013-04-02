@@ -190,10 +190,22 @@ class Calendar extends forumPage
 		// Set the timezone to match php (This might not work on all installations.
 		$GLOBALS['super']->db->query("SET time_zone = '".date_default_timezone_get()."'");
 		
+        /*
+        This needs to be changed. Potential solution:
+        use time() to figure out the time of the beggining of the month,
+        and the end of the month.
+        */
+        $start = mktime(0,0,0,$curMonth,0,$curYear);
+        
+        $end = mktime(0,0,0,$curMonth,$daysInPrevMonth,$curYear);    
+        /*echo "Start: ".$start."<br />";
+        echo "End: ".$end."<br />";
+        echo "End - Start: ".($end-$start)."<br />";
+        */
 		$topicsQuery = "
 		SELECT DATE(FROM_UNIXTIME(time_added)) AS date , count(*) AS topicCount
 		FROM ".TBL_PREFIX."topics
-		WHERE DATE(FROM_UNIXTIME(time_added)) BETWEEN '".$curYear."-".$curMonth."-01' AND '".$curYear."-".$curMonth."-".$daysInPrevMonth."'
+		WHERE time_added BETWEEN '".$start."' AND '".$end."'
 		GROUP BY DATE(FROM_UNIXTIME(time_added))
 		ORDER BY DATE(FROM_UNIXTIME(time_added))";
 		$topicsQuery = $GLOBALS['super']->db->query($topicsQuery);
@@ -201,7 +213,7 @@ class Calendar extends forumPage
 		$postsQuery = "
 		SELECT DATE(FROM_UNIXTIME(time_added)) AS date , count(*) AS postCount
 		FROM ".TBL_PREFIX."posts
-		WHERE DATE(FROM_UNIXTIME(time_added)) BETWEEN '".$curYear."-".$curMonth."-01' AND '".$curYear."-".$curMonth."-".$daysInPrevMonth."'
+		WHERE time_added BETWEEN '".$start."' AND '".$end."'                      
 		GROUP BY DATE(FROM_UNIXTIME(time_added))
 		ORDER BY DATE(FROM_UNIXTIME(time_added))";
 		$postsQuery = $GLOBALS['super']->db->query($postsQuery);
@@ -209,7 +221,7 @@ class Calendar extends forumPage
 		$usersQuery = "
 		SELECT DATE(FROM_UNIXTIME(time_added)) AS date , count(*) AS userCount
 		FROM ".TBL_PREFIX."users
-		WHERE DATE(FROM_UNIXTIME(time_added)) BETWEEN '".$curYear."-".$curMonth."-01' AND '".$curYear."-".$curMonth."-".$daysInPrevMonth."'
+		WHERE time_added BETWEEN '".$start."' AND '".$end."'                      
 		GROUP BY DATE(FROM_UNIXTIME(time_added))
 		ORDER BY DATE(FROM_UNIXTIME(time_added))";
 		$usersQuery = $GLOBALS['super']->db->query($usersQuery);

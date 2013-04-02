@@ -109,7 +109,10 @@ class bbCode
 	}
 	function urlOut($matches)
 	{
+		
 		$m2 = $this->startCallback($matches[1]);
+		//print_r($matches);
+		//echo "<br />";
 		$m4 = $this->startCallback($matches[2]);
 		
 		return '<a href="'.$m2.'">'.$m4.'</a>';
@@ -203,8 +206,8 @@ class bbCode
 	function parse($string, $return = true)
 	{
 		
-		//$string = htmlspecialchars($string);
-		
+		// No quotes so that this regex still works
+		$string = htmlentities($string, ENT_NOQUOTES);
 		
 		/**
 		 * Format the easy stuff, convert [b][u][i][strike]
@@ -280,6 +283,8 @@ class bbCode
 		
 		$string = nl2br($string);
 		$string = str_replace("\t",str_repeat("&nbsp;",4), $string);
+		
+		
 		
 		if ($return)
 			return $string;

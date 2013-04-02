@@ -61,7 +61,7 @@ class ForumsAdd extends adminSub
 		
 		if(isset($_POST['post']) && $_POST['post'] == 'form')
 		{
-			if(isSecureForm("addForum") && $this->fhelper->add())
+			if(isSecureForm("addEditForum") && $this->fhelper->add())
 			{
 				$success = new tpl(ROOT_PATH.'administration/display/templates/success_redir.php');
 				$success->add("message","Forum Added Successfully!");
@@ -69,6 +69,10 @@ class ForumsAdd extends adminSub
 				$success->add("url","index.php?act=forums&sub=structure");
 				//$success->add("timeout","5000");
 				echo $success->parse();
+			}
+			else
+			{
+				echo "Insecure!";
 			}
 		}
 		$content = new tpl(ADMIN_PATH.'display/templates/forums_add.php'); // include the content tpl file

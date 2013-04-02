@@ -151,26 +151,26 @@ class Register extends forumPage
 					`displayname`,
 					`password`,
 					`email`,
-					
 					`time_added`,
-					
 					`group_id`,
 					`theme_id`,
 					`posts_per_page`,
 					`topics_per_page`,
-					`read_time`
-					
+					`read_time`,
+					`show_online`
 					)
 					VALUES (
-					'".$username."', '".$displayname."','".$pass."', '".$email."',
-					
+					'".$username."',
+					'".$displayname."',
+					'".$pass."',
+					'".$email."',
 					'".time()."',
-					
 					'2',
 					'1',
 					'".$GLOBALS['super']->config->postsPerPage."',
 					'".$GLOBALS['super']->config->topicsPerPage."',
-					'".time()."'
+					'".time()."',
+					'1'
 					);
 					";
 				

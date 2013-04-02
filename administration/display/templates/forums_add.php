@@ -11,7 +11,7 @@
 					<strong>Name</strong>
 				</td>
 				<td class="input">
-					<?php secureForm("addForum"); ?>
+					<?php secureForm("addEditForum"); ?>
 					<input type="hidden" name="post" value="form" />
 					<input class="text" type="text" value="<?php echo $this->name?>" name="forum_name" />
 				</td>

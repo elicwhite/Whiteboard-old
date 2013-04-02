@@ -58,7 +58,7 @@
 		</div>
 		<div id="copyright">
 			Powered By WhiteBoard <span id="version"><?php echo $this->PBB_VERSION?></span><br />
-			&copy; <a href="http://www.powerwd.com">SaroSoftware</a><br />
+			&copy; <a href="http://www.sarosoftware.com">SaroSoftware</a><br />
 			All Rights Reserved
 		</div>
 	</div>

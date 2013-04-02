@@ -150,7 +150,7 @@ class editPost extends tDisplay
 				{
 					
 					$postId = $GLOBALS['super']->db->escape(intval($this->currentPost['id']));
-					$message = $GLOBALS['super']->db->escape(htmlentities($message));
+					$message = $GLOBALS['super']->db->escape($message);
 					
 					$posterid = $GLOBALS['super']->user->id; 
 					

@@ -17,6 +17,6 @@ require_once('../includes/functions/functions.php');
 	<body>
 		<div id="container">
 			<div id="header">
-				<img src="http://dev.powerwd.net/forum/themes/Default/images/header.jpg" alt="" />
+				<img src="images/header.jpg" alt="" />
 			</div>
 			<div id="container2">

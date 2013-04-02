@@ -216,7 +216,7 @@ define("TIMEZONENUM", "-7");
 	$queries[] = 
 	"INSERT INTO ".TBL_PREFIX."config (`name`, `value`, `readonly`, `description`, `group`, `time_modified`) VALUES
 	('siteName', '".$forumname."', '0', 'The name of the website to appear in the titlebar, and at the start of breadcrumbs.', 'general', ".$timestamp."),
-	('forumVersion', '.1.17', '1', 'The version of the forum system', 'general', ".$timestamp."),
+	('forumVersion', '.1.27', '1', 'The version of the forum system', 'general', ".$timestamp."),
 	('defaultTheme', '1', '0', 'The default theme to use for the forum', 'general', ".$timestamp."),
 	('crumbSeperator', '&raquo;', '0', 'The seperator used in the breadcrumbs', 'general', ".$timestamp."),
 	('timeZone', 'America/Los_Angeles', '0', 'The default timezone for the board to use.', 'general', ".$timestamp."),
@@ -266,7 +266,7 @@ define("TIMEZONENUM", "-7");
 	  `image_id` int(11) NOT NULL DEFAULT 0,
 	  `set_title` enum('0','1') NOT NULL,
 	  `flood_delay` int(11) NOT NULL DEFAULT 0,
-	  `color` varchar(10) NOT NULL DEFAULT '',
+	  `` varchar(10) NOT NULL DEFAULT '',
 	  `parent_group_id` int(11) NOT NULL DEFAULT 0,
 	  PRIMARY KEY  (`id`)
 	) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -289,7 +289,7 @@ define("TIMEZONENUM", "-7");
 	
 	$queries[] =
 	"INSERT INTO ".TBL_PREFIX."images (`name`, `url`) VALUES
-	('Avatar', '".FORUM_ROOT."images/avatar_1.png');
+	('Avatar', '".FORUM_ROOT."images/avatar_1.jpg');
 	";
 	
 	

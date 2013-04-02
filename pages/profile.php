@@ -65,7 +65,18 @@ class Profile extends forumPage
 	{
 		parent::__construct();
 		
-		$id = $_GET['id'];
+		if (isset($_GET['id']) && $_GET['id'] > 0)
+		{
+			$id = $_GET['id'];
+		}
+		else 
+		{
+			$error = new tpl(ROOT_PATH.'themes/Default/templates/error.php');
+			$error->add("error_message", "You have reached this page in error.<br />Please go back and try again.");
+			echo $error->parse();
+			die();
+		}
+		
 		// and sanitize it
 		$id = intval($id);
 		$id = $GLOBALS['super']->db->escape($id);
@@ -74,7 +85,7 @@ class Profile extends forumPage
 		$userSelect = "SELECT u.*, g.color, g.name FROM ".TBL_PREFIX."users AS u
 				INNER JOIN ".TBL_PREFIX."groups AS g
 				ON u.group_id =g.id
-				WHERE u.id=".$id;
+				WHERE u.id=".$this->escapedId;
 		$userSelect = $GLOBALS['super']->db->query($userSelect);
 		
 		if ($GLOBALS['super']->db->getRowCount($userSelect) == 0)

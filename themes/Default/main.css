@@ -830,7 +830,7 @@ div.postArea div.buttonwrapper .button
 {
 	text-decoration: underline;
 }
-.postbox a img
+a img
 {
 	border: 0;
 }
@@ -975,7 +975,7 @@ td.reviewdate a
 
 td.reviewuser
 {
-	width: 200px;
+	width: 150px;
 	border-right: 1px solid #63839F;
 	border-bottom: 1px solid #63839F;
 	text-align: center;
@@ -1240,4 +1240,8 @@ table.info td.blue input
 	background-color: white;
 	font-size: 12px;
 	font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+	
+	white-space: normal;
+	word-wrap: break-word;
+
 }
