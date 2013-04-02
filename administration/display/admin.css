@@ -1,0 +1,386 @@
+/*-----
+File: /themes/default/stylesheets/default.css
+Author: SaroSoftware
+Date Created: 03/19/2007
+Last Edited By: Eli White
+Last Edited Date: 04/07/2007
+Latest Changes: 
+- Added pagination classes
+
+Comments:
+Primary index page for forums.
+-----*/
+body
+{
+	background: url('images/bodybg.gif') repeat-x #DFE8F3;
+	font-family: "Calibri", "Segoe UI", "Verdana";
+	font-size: small;
+}
+.admin_line1
+{
+	vertical-align: middle;
+	padding: 5px 15px 5px 15px;
+	background-color: #ECF2F7;
+}
+.admin_line2
+{
+	padding: 5px 15px 5px 15px;
+	background-color: #DFE8F3;
+}
+.admin_class
+{
+	padding: 5px 15px 5px 15px;
+	background-color: #C2D2E2;
+	font-weight: bold;
+}
+.admin_sortorder
+{
+	vertical-align: middle;
+	border: 1px solid #81A3CF;
+	font-size: 9px;
+	padding: 1px;
+}
+.admin_structure_buttons
+{
+	margin: 0;
+	padding: 0;
+	float:right;
+	width: 400px;
+}
+.admin_structure_buttons a
+{
+	color: black;
+	text-decoration: none;
+}
+.admin_structure_submit
+{
+	margin: auto;
+	border: 2px solid #5A7497;
+	border-top: 0px;
+	width: 75px;
+	background-color: #81A3CF;
+}
+input.admin_structure_submit_button
+{
+	color: #ffffff;
+	font-weight: bold;
+	border: 0;
+	background-color: transparent;
+}
+
+ul.adminpages, ul#topnav2
+{
+	margin: 0;
+	padding: 0px;
+	padding-bottom: 1px;
+	list-style: none;
+	background: #81A3CF;
+	text-align: center;
+	border-bottom: 1px solid #5A7497;
+}
+ul.adminpages a, ul#topnav2 a
+{
+	text-decoration: none;
+}
+ul.adminpages li, ul.adminpages li a, ul#topnav2 li, ul#topnav2 li a
+{
+	display: inline;
+	padding: 4px;
+	color: white;
+}
+ul.adminpages li.selected, ul.adminpages li.selected a, ul#topnav2 li.selected, ul#topnav2 li.selected a
+{
+	background-color: white;
+	border: 1px solid #5A7497;
+	border-bottom: 0;
+	color: black;
+	font-weight: bold;
+}
+
+ul.adminpages li.selected a, ul#topnav2 li.selected a
+{
+	padding: 0px;
+	border: none;
+}
+ul#topnav2
+{
+	margin-top: 10px;
+	border-top: 1px solid #5A7497;
+}
+ul#topnav2 li.selected, ul#topnav2 li.selected a
+{
+	border-top: 0;
+}
+
+.clearer
+{
+	clear:both;
+}
+#container
+{
+	width: 900px;
+	margin: auto;
+	border: 10px solid #5A7497;
+	background-color: #ffffff;
+	text-align: center;
+}
+#container2
+{
+	margin: 15px;
+}
+#copyright
+{
+	margin-top: 10px;
+	border-top: 1px solid #c2d2e2;
+	color: #000000;
+	padding: 10px;
+	text-align: center;
+	line-height: 20px;
+	background-color: #ECF2F7;
+	font: small "Calibri", "Segoe UI", "Verdana";
+}
+#footerwrapper
+{
+	margin-top: 20px;
+	clear: both;
+}
+
+div.centerbox
+{
+	border: 5px solid #5A7497;
+	background-color: #FFF9D7;
+	text-align: left;
+}
+div.left_section
+{
+	width: 283px;
+	text-align: center;
+	float: left;
+	border-right: 4px solid #5A7497;
+	min-height: 100px;
+}
+div.middle_section
+{
+	width: 286px;
+	float: left;
+	text-align: center;
+	border-right: 4px solid #5A7497;
+	min-height: 100px;
+}
+div.right_section
+{
+	width: 283px;
+	text-align: center;
+	float: right;
+	min-height: 100px;
+}
+div.section_header
+{
+	text-align: center;
+	font-weight: bold;
+	background-color: #FFE8BF;
+	font-size: larger;
+	padding-top: 0px;
+	padding-bottom: 2px;
+	border-bottom: 1px solid #5A7497;
+}
+ul.infoboxes
+{
+	list-style-type: none;
+	padding: 0px;
+}
+div.mainheaderbox
+{
+	text-align: center;
+	padding: 5px;
+	border: 1px solid #c2d2e2;
+	background-color: #ecf2f7;
+	color: #000000;
+	font-size: 12px;
+	margin-bottom: 10px;
+}
+
+div.mainheaderbox2
+{
+	text-align: center;
+	padding: 5px;
+	border: 1px solid #E2C822;
+	background-color: #FFF9D7;
+	color: #000000;
+	font-size: 12px;
+	margin-bottom: 10px;
+	
+}
+
+
+div.contentbox
+{
+	font-size: 13px;
+	border: 1px solid #63839F;
+	border-top: none;
+	background-color: #ECF2F7;
+	padding: 0px;
+}
+
+.catrow
+{
+	color: #FFFFFF;
+	font: 15px "Arial";
+	font-weight: bold;
+	text-transform: capitalize;
+	margin-top: 20px;
+	padding-left: 10px;
+	background: url('img/catbar.gif') repeat-x;
+	border: 1px solid #63839F;
+	height: 30px;
+	line-height: 30px;
+	text-align: left;
+}
+
+
+/* add forums */
+table.info
+{
+	background-color: #ffffff;
+	padding: 0px;
+	width: 100%;
+	text-align: left;
+}
+
+table.info td
+{
+	margin: 0px;
+	padding: 5px;
+	
+	vertical-align: top;
+	font-size: 13px;
+	background-color: #ECF2F7;
+	border-right: 1px solid #C3D0DF;
+	border-bottom: 1px solid #C3D0DF;
+	vertical-align: middle;
+}
+table.info td.info
+{
+	width: 40%;
+	
+	background-color: #DFE8F3;
+	border-right: 1px solid #9BACBF;
+	border-bottom: 1px solid #9BACBF;
+}
+table.info td.input input
+{
+}
+
+input.text, textarea.textarea, select.select
+{
+	font-family: "Calibri", "Segoe UI", "Verdana";
+	font-size: 12px;
+	border: 1px solid #5A7497;
+	padding-left: 5px;
+	padding-right: 5px;
+	width: 200px;
+}
+textarea.textarea
+{
+	padding: 5px;
+}
+p.submit
+{
+	margin: 0;
+	padding-top: 5px;
+}
+input.submit
+{
+	margin: 5px 5px 1em 5px;
+	background-color: #DFE8F3;
+	border: 1px solid #5A7497;
+	font-family: "Calibri", "Segoe UI", "Verdana";
+	font-size: 12px;
+}
+input.text:focus, textarea.textarea:focus, .select:focus
+{
+	border: 1px solid #4FA8FF;
+}
+input.checkbox
+{
+	vertical-align: middle;
+	margin-left: 0;
+}
+
+div.error, div.success
+{
+	text-align: center;
+	padding: 5px;
+	border: 1px solid #E2C822;
+	background-color: #FFF9D7;
+	color: #000000;
+	font-size: 12px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+div.success
+{
+	background-color: #DFFFE0;
+	border-color: #009F07;
+}
+
+/* error headings */
+div.error strong, div.success strong
+{
+	font-size: 16px;
+}
+div.error a, div.success a
+{
+	color: #000000;
+}
+
+
+form.edit
+{
+	margin: 0;
+	padding: 0;
+}
+
+div.contentbox
+{
+	margin: 0px;
+	padding: 0px;
+}
+
+
+/** permissions settings **/
+table.permissions
+{
+	width: 100%;
+}
+table.permissions td, table.permissions th
+{
+	padding: 2px 5px 2px 5px;
+	width: 80px;
+}
+table.permissions th
+{
+	background-color: #81A3CF;
+	color: white;
+}
+table.permissions td:first-child
+{
+	width: 200px;
+}
+table.permissions tr td
+{
+	border-top: 1px solid #63839F;
+}
+
+
+
+div#header
+{
+	background: url('../../themes/Default/images/headerbg.gif') repeat-x;
+	border-bottom: 1px solid #5A7497;
+}
+div#header img
+{
+	vertical-align: bottom;
+}

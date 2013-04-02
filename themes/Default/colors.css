@@ -1,0 +1,64 @@
+body, a {
+	color: black;
+}
+
+body, #breadcrumbs, #markread, #navbar li, #searchbar, .stat_row .stat_icon,
+table.calendar th, table.calendar td:hover, table.calendar td.inactive,
+table.calendar td.current, .catrow, td.icon, .forum_row .forum_activity,
+.forum_links li, .forum_top_links li, .topic_rows th, .topic_rows .icon,
+.topic_rows .forum_activity, ul.pagination li, table.info td.info, .userinfo,
+#forumfooterbar a:hover span 
+{
+	background-color: #dfe8f3;
+}
+
+#container, table.calendar, table.info
+{
+	background-color: #ffffff;
+}
+
+#mainheaderbox, #navbar li.selected, #navbar li:hover,
+#copyright, .stat_row, .contentbox, table.calendar td, .forum_row,
+.foruminfo_box, table.topic_rows, table.info td, .postbox, #forumfooterbar,
+#usersonpage, .forum_top_links li.selected, #controlpanel {
+	background-color: #ecf2f7;
+}
+
+/* The search bar */
+.searchsubmit, .searchbox {
+	background-color: #ffffff;
+}
+
+/* Row on the main page that contains the statistics */
+
+.stat_row .stat_main hr {
+	background-color: #c2d2e2;
+}
+div.error {
+	background-color: #fff9d7;
+}
+div.success {
+	background-color: #dfffe0;
+}
+
+table.calendar td.inactive:hover, ul.pagination li.current,
+ul.pagination li:hover, ul.info li a:hover {
+	background-color: #C2D7EF;
+}
+
+.catrow, .catrow a, .datainfo, ul.info li.header, td.reviewdate,
+td.reviewdate a {
+	color: #ffffff;
+}
+
+.foruminfo_box, a:hover {
+	color: #5384bf;
+}
+
+div.postArea {
+	background-color: #9BB8CF;
+}
+
+ul.info li.header {
+	background-color: #A8BACF;
+}
