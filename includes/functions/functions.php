@@ -1,19 +1,19 @@
 <?php
 /**
  * Copyright Eli White & SaroSoftware 2010
- * 
+ *
  * This file is part of WhiteBoard.
- * 
+ *
  * WhiteBoard is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * WhiteBoard is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with WhiteBoard.  If not, see <http://www.gnu.org/licenses/>.
  *
@@ -24,7 +24,7 @@
  Date Created: 3/30/09
  Last Edited By: Eli White
  Last Edited Date: 5/3/09
- 	
+
  Comments:
 	Global functions for the discussion board system.
 
@@ -38,11 +38,19 @@
  * @param string $password	The password that we are encrypting
  * @return string			An encrypted string using both the username and password
  */
-function encrypt_password($password)  
-{  
-	$md5_pass = md5($password); 
-	$hash_crypt_pass = hash("whirlpool",PASS_HASH.$md5_pass); 
-	return $hash_crypt_pass;  
+function encrypt_password($password)
+{
+	$md5_pass = md5($password);
+
+	// We need to check this because it is called in the installer when
+	// PASS_HASH is not defined
+	if (defined("PASS_HASH"))
+		$pass = PASS_HASH.$md5_pass;
+	else
+		$pass = "hash".$md5_pass;
+
+	$hash_crypt_pass = hash("whirlpool",$pass);
+	return $hash_crypt_pass;
 }
 
 /**
@@ -58,18 +66,18 @@ function secureForm($formName, $return = false)
 	$hash = substr($hash, 4, 10);
 	$input = '<input type="hidden" name="'.$formName.'Hash" value="'.$hash.'" />';
 	$_SESSION[$formName.'Hash'] = $hash;
-	
+
 	if ($return)
 		return $input;
-	else 
+	else
 		echo $input;
-	
+
 }
 
 /**
  * Checks the security of a form created with secureForm()
  * against CSRF attacks
- * 
+ *
  * @return boolean true if the form was valid, false otherwise
  */
 function isSecureForm($formName)
@@ -77,17 +85,17 @@ function isSecureForm($formName)
 	//echo "ph: ".$_POST['formHash']."<br />";
 	//echo "sh: ".$_SESSION['formHash'];
 	$return = false;
-	
+
 	if (!isset($_POST[$formName.'Hash']) || !isset($_SESSION[$formName.'Hash']))
 		return false;
-	
+
 	if ($_POST[$formName.'Hash'] == $_SESSION[$formName.'Hash'])
 		$return = true;
-		
+
 	unset ($_SESSION[$formName.'Hash']);
-	
+
 	return $return;
-		
+
 }
 
 /**
@@ -103,7 +111,7 @@ function dotdotdot($string, $length)
 	//echo "string: ".$string.", length: ".$length."<br />";
 	if (strlen($string) > $length)
 		$string = substr($string, 0, $length - 3)."...";
-	
+
 	return $string;
 }
 
@@ -116,7 +124,7 @@ function dotdotdot($string, $length)
 */
 
 function plural($num, $endsInY = false)
-{		
+{
 	if ($num != 1)
     {
     	if ($endsInY)

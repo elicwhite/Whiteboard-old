@@ -15,7 +15,7 @@
 		<th class="forum_latest">
 			Latest Post
 		</th>
-		<?php 
+		<?php
 		if($this->canMod)
 		{
 		?>
@@ -25,7 +25,7 @@
 		<?php
 		}
 		?>
-	</tr>	
+	</tr>
 	<?php
 	foreach ($this->TOPICS as $topic)
 	{
@@ -35,7 +35,14 @@
 				<img src="<?php echo $topic['image']?>" alt="" />
 			</td>
 			<td class="forum_main">
-				<a href="<?php echo $topic['link'] ?>"><span class="topicname"><?php echo $topic['name']?></span><span style="display: none;" class="preview"><?php echo $topic['preview']?></span></a>
+				<a href="<?php echo $topic['link'] ?>" title="<?php echo $topic['preview']?>">
+					<span class="topicname">
+						<?php echo $topic['name']?>
+					</span>
+					<!--<span style="display: none;" class="preview">
+						<?php echo $topic['preview']?>
+					</span>-->
+				</a>
 			</td>
 			<td class="forum_activity">
 				<div>
@@ -54,11 +61,11 @@
 						<span class="label">Last post by:</span>
 						<span><?php echo $topic['lastposter']?></span>
 					</span>
-	
+
 					<span class="section">
 						<span><a href="<?php echo $topic['link']?>&amp;page=last"><?php echo $topic['lastpostdate']?></a></span>
 					</span>
-				</div>	
+				</div>
 			</td>
 			<?php
 			if ($topic['canDelete'])

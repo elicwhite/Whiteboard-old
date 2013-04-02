@@ -86,13 +86,13 @@ a.username:hover
 	font-size: 13px;
 }
 #mainheaderbox, #forumfooterbar, #usersonpage
-{	
+{
 	text-align: center;
 	padding: 5px;
 	border: 1px solid #c2d2e2;
 	font-size: 12px;
 	overflow: hidden;
-	
+
 	-moz-border-radius: 6px 6px 0 0;
 	-webkit-border-top-left-radius: 6px;
 	-webkit-border-top-right-radius: 6px;
@@ -107,7 +107,7 @@ a.username:hover
 	padding-left: 10px;
 	clear: both;
 	margin-top: 10px;
-	
+
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 	-khtml-border-radius: 10px;
@@ -149,7 +149,7 @@ a.username:hover
 {
 	text-align: left;
 	margin-top: 10px;
-	
+
 	-moz-border-radius: 0px;
 	-webkit-border-radius: 0px;
 	-khtml-border-radius: 0px;
@@ -181,7 +181,7 @@ a.username:hover
 	list-style-type: none;
 	display: inline;
 	font-size: 13px;
-	
+
 	-moz-border-radius: 4px 4px 0 0;
 	-webkit-border-top-left-radius: 4px;
 	-webkit-border-top-right-radius: 4px;
@@ -210,12 +210,12 @@ a.username:hover
 	border: 1px solid #c2d2e2;
 	float: right;
 	margin-top: -1px;
-	
+
 	-moz-border-radius: 0 0 6px 6px;
 	-webkit-border-bottom-right-radius: 6px;
 	-khtml-border-bottom-right-radius: 6px;
 	border-bottom-right-radius: 6px;
-	
+
 }
 input.searchbox
 {
@@ -238,7 +238,7 @@ input.searchbox
 	border: 1px solid #63839F;
 	border-bottom: 0;
 	border-left: 0;
-	
+
 	-moz-border-radius: 0 10px 0 0;
 	-webkit-border-top-right-radius: 10px;
 	-khtml-border-top-right-radius: 10px;
@@ -271,7 +271,7 @@ input.searchbox
 	vertical-align: middle;
 	text-align: center;
 	border-left: 1px solid #63839F;
-}	
+}
 #usertext_left
 {
 	float: left;
@@ -279,7 +279,7 @@ input.searchbox
 #usertext_right
 {
 	float: right;
-}	
+}
 
 div.error, div.success
 {
@@ -337,7 +337,7 @@ table.calendar
 }
 table.calendar th
 {
-	width: 100px; /* just some number greater than the possible seems to make the widths even */	
+	width: 100px; /* just some number greater than the possible seems to make the widths even */
 	border-right: 1px solid #5A7497;
 	border-bottom: 1px solid #5A7497;
 }
@@ -387,7 +387,7 @@ table.calendar li.daynum
 	border-bottom: none;
 	height: 30px;
 	line-height: 30px;
-	
+
 	-moz-border-radius: 10px 10px 0 0;
 	-webkit-border-top-left-radius: 10px;
 	-webkit-border-top-right-radius: 10px;
@@ -480,6 +480,18 @@ td.icon
 
 /* =======START FORUM DISPLAY======*/
 
+.tooltip
+{
+	display:none;
+	background:transparent url('images/tooltip.png');
+	font-size:12px;
+	height:60px;
+	width:160px;
+	padding:25px;
+	color:#000000;
+	text-align: justify;
+}
+
 .foruminfo_box
 {
 	padding: 5px;
@@ -510,7 +522,7 @@ td.icon
 	display: inline;
 	font-size: 13px;
 	font-weight: bold;
-	
+
 	-moz-border-radius: 0 0 4px 4px;
 	-webkit-border-bottom-left-radius: 4px;
 	-webkit-border-bottom-right-radius: 4px;
@@ -519,7 +531,7 @@ td.icon
 	border-bottom-left-radius: 4px;
 	border-bottom-right-radius: 4px;
 }
-ul.forum_links 
+ul.forum_links
 {
 	padding: 0 .5em 0 0;
 	text-align: right;
@@ -542,8 +554,8 @@ ul.forum_links
 	font-size: 13px;
 	font-weight: bold;
 	text-decoration: none;
-	
-	
+
+
 	-moz-border-radius: 4px 4px 0 0;
 	-webkit-border-top-left-radius: 4px;
 	-webkit-border-top-right-radius: 4px;
@@ -551,10 +563,10 @@ ul.forum_links
 	-khtml-border-top-right-radius: 4px;
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;
-	
-	
+
+
 }
-ul.forum_top_links 
+ul.forum_top_links
 {
 	padding: 0;
 	text-align: center;
@@ -659,7 +671,7 @@ tr.forum_row td.forum_main a
 	width: 175px;
 }
 
-ul.pagination 
+ul.pagination
 {
 	padding: 0 0 0 .5em;
 	text-align: right;
@@ -1186,7 +1198,7 @@ table.info td
 {
 	margin: 0px;
 	padding: 5px;
-	
+
 	vertical-align: top;
 	font-size: 13px;
 	background-color: #ECF2F7;
@@ -1240,7 +1252,7 @@ table.info td.blue input
 	background-color: white;
 	font-size: 12px;
 	font-family: "Consolas", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
-	
+
 	white-space: normal;
 	word-wrap: break-word;
 

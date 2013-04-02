@@ -29,6 +29,8 @@ Comments:
 Configuration settings page
 
 -----*/
+$page = "1";
+
 require_once('includes/header.php');
 require_once('install.php');
 

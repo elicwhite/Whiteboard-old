@@ -224,7 +224,6 @@ $header->add("STYLESHEETS", $css); // Add our array of stylesheets to our templa
 $header->add("STYLESHEET", $styleSheet);
 
 $js = $pageClass->getJS();
-$js[] = array("path" => "includes/js/GoogleAnalytics.js");
 $header->add("SCRIPTS", $js); // Put our scripts in our template
 
 echo $header->parse(); // Parse out our header file and continue
