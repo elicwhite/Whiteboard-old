@@ -83,6 +83,11 @@ class postTopic extends fDisplay
 	public function display()
 	{
 		ob_start();
+		
+		// An array that contains all the validation errors, if no errors then we can
+		// go ahead and submit, otherwise we need to print them all to the user
+		$errorArray = array();
+		
 		// to be allowed to post, you must be able to view the board, view the forum, and be able to make new topics in the forum
 		if (!$GLOBALS['super']->user->can("ViewBoard") ||
 			!$GLOBALS['super']->user->can("Forum".$this->currentForum['id'], "View") ||
@@ -94,11 +99,7 @@ class postTopic extends fDisplay
 		elseif (isSecureForm() && isset($_POST['formsent']) && $_POST['formsent'] == "1")
 		{
 			// for now, lets ignore preview
-			
-			// An array that contains all the validation errors, if no errors then we can
-			// go ahead and submit, otherwise we need to print them all to the user
-			$errorArray = array();
-			
+						
 			$subject = $_POST['subject'];
 			$message = $_POST['message'];
 			

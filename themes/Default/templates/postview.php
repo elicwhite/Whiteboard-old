@@ -45,13 +45,6 @@ foreach($this->POSTS as $post)
 		<div class="rightinfo">
 			Posts: <?php echo $post['postcount']?>
 		</div>
-		
-		<!--<ul class="info">
-			<li class="username"><?php echo $post['username']?></li>
-			<li><span class="usergroup" style="color: <?php echo $post['groupcolor']?>"><?php echo $post['group']?></span></li>
-			<li><a href="http://registration.com">Joined: <?php echo $post['joindate']?></a></li>
-			<li>Posts: <?php echo $post['postcount']?></li>
-		</ul>-->
 	</div>
 	<div class="postbox">
 		<?php echo $post['message'];
@@ -59,9 +52,13 @@ foreach($this->POSTS as $post)
 		if ($post['editDate'] != 0)
 		{
 			?>
-			<hr />
+			<div class="edited">
+				Last Edited: 
 			<?php
-			echo "Last Edited: ".$post['editDate'];
+			echo $post['editDate'];
+			?>
+			</div>
+			<?php
 		}
 		
 		if($post['signature'] != "")

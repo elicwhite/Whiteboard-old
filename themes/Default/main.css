@@ -824,12 +824,17 @@ div.postArea div.buttonwrapper .button
 	border: 1px solid #C2D2E2;
 	border-top: 0;
 	padding: 10px;
+	overflow: auto;
 }
 .postbox a
 {
 	text-decoration: underline;
 }
-.postbox .signature
+.postbox a img
+{
+	border: 0;
+}
+.postbox .edited, .postbox .signature
 {
 	margin-top: 5px;
 	padding-top: 5px;

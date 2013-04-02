@@ -89,7 +89,7 @@ class Installer
 		
 		$ctx = stream_context_create($params);
 		
-		$fp = fopen($url, 'rb', false, $ctx);
+		$fp = fopen($url, 'rb', false, $context);
 		fpassthru($fp);
 		fclose($fp);
 	}
@@ -216,7 +216,7 @@ define("TIMEZONENUM", "-7");
 	$queries[] = 
 	"INSERT INTO ".TBL_PREFIX."config (`name`, `value`, `readonly`, `description`, `group`, `time_modified`) VALUES
 	('siteName', '".$forumname."', '0', 'The name of the website to appear in the titlebar, and at the start of breadcrumbs.', 'general', ".$timestamp."),
-	('forumVersion', 'V.1 Alpha', '1', 'The version of the forum system', 'general', ".$timestamp."),
+	('forumVersion', '.1.11', '1', 'The version of the forum system', 'general', ".$timestamp."),
 	('defaultTheme', '1', '0', 'The default theme to use for the forum', 'general', ".$timestamp."),
 	('crumbSeperator', '&raquo;', '0', 'The seperator used in the breadcrumbs', 'general', ".$timestamp."),
 	('timeZone', 'America/Los_Angeles', '0', 'The default timezone for the board to use.', 'general', ".$timestamp."),
@@ -444,7 +444,9 @@ define("TIMEZONENUM", "-7");
 		{
 			$db->query($query) or die("An error has occured while running query #".$key);
 		}
+		
 		$this->register($root, $email, $_SERVER['REMOTE_ADDR']);
+		
 		return true;
 	}
 }

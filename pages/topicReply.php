@@ -120,6 +120,9 @@ class topicReply extends tDisplay
 		
 		$bbCode = new bbCode();
 		
+		// An array that contains all the validation errors, if no errors then we can
+		// go ahead and submit, otherwise we need to print them all to the user
+		$errorArray = array();
 		
 		// to be allowed to reply, you must be able to view the board, view the forum, and be able to make replies in the forum
 		if (!$GLOBALS['super']->user->can("ViewBoard") ||
@@ -127,9 +130,7 @@ class topicReply extends tDisplay
 			!$GLOBALS['super']->user->can("Forum".$this->currentForum['id'], "Reply")
 		)
 		{
-			echo $GLOBALS['super']->user->noPerm();
-			
-			
+			echo $GLOBALS['super']->user->noPerm();			
 		}
 		elseif ($this->noTopic)
 		{
@@ -142,11 +143,7 @@ class topicReply extends tDisplay
 		{
 			
 			// for now, lets ignore preview
-			
-			// An array that contains all the validation errors, if no errors then we can
-			// go ahead and submit, otherwise we need to print them all to the user
-			$errorArray = array();
-			
+
 			$message = $_POST['message'];
 			
 		
@@ -202,7 +199,7 @@ class topicReply extends tDisplay
 				$success = new tpl(ROOT_PATH.'themes/Default/templates/success_redir.php');
 				$success->add("message","Reply made successfully!");
 				$success->add("url","index.php?act=tdisplay&id=".$topicId.'&page=last');
-				echo $success->parse();
+				die($success->parse());
 				
 			}
 		}

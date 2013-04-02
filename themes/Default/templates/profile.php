@@ -120,7 +120,7 @@
 						<strong>Latest Post</strong>
 					</td>
 					<td class="input">
-						<a href="<?php echo FORUM_ROOT?>index.php?act=tdisplay&amp;id=<?php echo $this->LastPost['topicid']?>&amp;page=last"><?php echo $this->LastPost['topicName']?></a> - <?php echo $this->LastPostDate?>
+						<a href="<?php echo FORUM_ROOT?>index.php?act=tdisplay&amp;id=<?php echo $this->LastPost['topic_id']?>&amp;page=last"><?php echo $this->LastPost['topicName']?></a> - <?php echo $this->LastPostDate?>
 					</td>
 				</tr>
 				<?php
@@ -152,6 +152,7 @@
 					<?php
 				}
 				?>
+				<!--
 				<tr>
 					<td class="info">
 						<strong>Birthday</strong>
@@ -160,6 +161,7 @@
 						8/7/1990 - (18 Years Old)
 					</td>
 				</tr>
+				-->
 			</table>
 		</div>
 		

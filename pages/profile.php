@@ -168,24 +168,24 @@ class Profile extends forumPage
 		$lastPostDate = $GLOBALS['super']->functions->formatDate($lastPost['time_added']);
 		
 		$avatar = $GLOBALS['super']->functions->getImage($this->currentUser['avatar']);
-		$signature = $bbCode->parse($GLOBALS['super']->user->signature);
+		$signature = $bbCode->parse($this->currentUser['signature']);
 		// We want to know what page this user is currently on. Check if they
 		// are on the online list, if not they are "Offline"
 		
 		$online = "SELECT `page` FROM ".TBL_PREFIX."online WHERE `userid`=".$this->currentUser['id'];
 		$online = $GLOBALS['super']->db->query($online);
 		$onlinecount = $GLOBALS['super']->db->getRowCount($online);
+				
+		$fname = $this->currentUser['firstname'];
+		$lname = $this->currentUser['lastname'];
 		
-		$fname = $GLOBALS['super']->user->firstname;
-		$lname = $GLOBALS['super']->user->lastname;
+		$gender = $this->currentUser['gender'];
+		$country = $this->currentUser['country'];
+		$bday = $this->currentUser['birth_day'];
+		$bmonth = $this->currentUser['birth_month'];
+		$byear = $this->currentUser['birth_year'];
 		
-		$gender = $GLOBALS['super']->user->gender;
-		$country = $GLOBALS['super']->user->country;
-		$bday = $GLOBALS['super']->user->birth_day;
-		$bmonth = $GLOBALS['super']->user->birth_month;
-		$byear = $GLOBALS['super']->user->birth_year;
-		
-		$website = $GLOBALS['super']->user->website;
+		$website = $this->currentUser['website'];
 		
 		$name = "";
 		if ($fname)
@@ -195,16 +195,32 @@ class Profile extends forumPage
 				$name .= " ".$lname;
 		}
 		
+		//echo "N:".$name;
+		
 		$personal = array();
 		if ($name)
 			$personal[] = array("Real Name", $name);
-		if ($gender)
+		
+		if ($gender == "m")
+			$gender = "Male";
+		elseif ($gender == "f")
+			$gender = "Female";
+		
+		if ($gender)	
 			$personal[] = array("Gender", $gender);
+			
+			
 		if ($country)
 			$personal[] = array("Country", $country);
 		if ($website)
 			$personal[] = array("Website", '<a href="'.$website.'">'.$website.'</a>');
 		
+		
+		if ($bday && $bmonth && $byear)
+		{
+			$timestamp = mktime(null, null, null, $bmonth, $bday, $byear);
+			$personal[] = array("Birth Day", date("F jS, Y", $timestamp));
+		}
 			
 		
 		if($onlinecount > 0)

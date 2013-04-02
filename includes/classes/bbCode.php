@@ -74,16 +74,16 @@ class bbCode
 	 */
 	function color($matches)
 	{
-		$m2 = $this->startCallback($matches[2]);
-		$m4 = $this->startCallback($matches[4]);
+		$m2 = $this->startCallback($matches[1]);
+		$m4 = $this->startCallback($matches[2]);
 		return '<span style="color: '.$m2.'">'.$m4.'</span>';
 	}
 	
 	/* This should be changed. We shouldn't be using headers here */
 	function size($matches)
 	{
-		$m2 = $this->startCallback($matches[2]);
-		$m4 = $this->startCallback($matches[4]);
+		$m2 = $this->startCallback($matches[1]);
+		$m4 = $this->startCallback($matches[2]);
 		// the largest the number can be is 6
 		$m2 = min(6, $m2);
 		// the lowest the number can be is 1
@@ -109,8 +109,8 @@ class bbCode
 	}
 	function urlOut($matches)
 	{
-		$m2 = $this->startCallback($matches[2]);
-		$m4 = $this->startCallback($matches[4]);
+		$m2 = $this->startCallback($matches[1]);
+		$m4 = $this->startCallback($matches[2]);
 		
 		return '<a href="'.$m2.'">'.$m4.'</a>';
 	}
@@ -121,8 +121,8 @@ class bbCode
 	}
 	function emailOut($matches)
 	{
-		$m2 = $this->startCallback($matches[2]);
-		$m4 = $this->startCallback($matches[4]);
+		$m2 = $this->startCallback($matches[1]);
+		$m4 = $this->startCallback($matches[2]);
 		
 		return '<a href="mailto:'.$m2.'">'.$m4.'</a>';
 	}
@@ -144,6 +144,20 @@ class bbCode
 	{
 		$string = $this->startCallback($matches[1]);
 		return '<div style="text-align: right">'.$string.'</div>';
+	}
+	
+	// Flats a div
+	function align($matches)
+	{
+		$alignment = $this->startCallback($matches[1]);
+		
+		$content = $this->startCallback($matches[2]);
+		$align = "none";
+
+		if (in_array($alignment, array("left", "right")))
+			$align = $alignment;
+			
+		return '<div style="float: '.$align.'">'.$content.'</div>';
 	}
 	
 	function pre($matches)
@@ -212,8 +226,8 @@ class bbCode
 		/*
 		 * FORMAT COLOR AND SIZE
 		 */
-		$string = preg_replace_callback('/\[color=(&quot;)?(.*?)(&quot;)?\](.*?)\[\/color\]/is', array($this, 'color'), $string);
-		$string = preg_replace_callback('/\[size=(&quot;)?(.*?)(&quot;)?\](.*?)\[\/size\]/is', array($this, 'size'),$string);
+		$string = preg_replace_callback('/\[color=\"?(.*?)\"?\](.*?)\[\/color\]/is', array($this, 'color'), $string);
+		$string = preg_replace_callback('/\[size=\"?(.*?)\"?\](.*?)\[\/size\]/is', array($this, 'size'),$string);
 		/**
 		 * END FORMATTING COLOR AND SIZE
 		 */
@@ -225,13 +239,13 @@ class bbCode
 		$string = preg_replace_callback('/\[img\](.*?)\[\/img\]/is', array($this, 'image'),$string);
 		
 		$string = preg_replace_callback('/\[url\](.*?)\[\/url\]/is', array($this, 'urlIn'),$string);
-		$string = preg_replace_callback('/\[url=(&quot;)?(.*?)(&quot;)?\](.*?)\[\/url\]/is', array($this, 'urlOut'),$string);
+		$string = preg_replace_callback('/\[url=\"?(.*?)\"?\](.*?)\[\/url\]/is', array($this, 'urlOut'),$string);
 		
 		/**
 		 * Mailto tags
 		 */
 		$string = preg_replace_callback('/\[email\](.*?)\[\/email\]/is', array($this, 'emailIn'),$string);
-		$string = preg_replace_callback('/\[email=(&quot;)?(.*?)(&quot;)?\](.*?)\[\/email\]/is', array($this, 'emailOut'),$string);
+		$string = preg_replace_callback('/\[email=\"?(.*?)\"?\](.*?)\[\/email\]/is', array($this, 'emailOut'),$string);
 		
 		
 		/**
@@ -241,6 +255,8 @@ class bbCode
 		$string = preg_replace_callback("/\[center\](.*?)\[\/center\]/is", array($this, 'center'), $string);
 		$string = preg_replace_callback("/\[right\](.*?)\[\/right\]/is", array($this, 'right'), $string);
 		$string = preg_replace_callback("/\[left\](.*?)\[\/left\]/is", array($this, 'left'), $string);
+		
+		$string = preg_replace_callback("/\[align=\"?(.*?)\"?](.*?)\[\/align\]/is", array($this, 'align'), $string);
 		
 		$string = preg_replace_callback("/\[pre\](.*?)\[\/pre\]/is", array($this, 'pre'), $string);
 		

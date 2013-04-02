@@ -188,8 +188,17 @@ $Doctype_mobile = '<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN"
 $header = new tpl(ROOT_PATH.'themes/Default/templates/header.php'); // include the header tpl file
 $header->add("TITLE", $pageClass->getTitle());
 
+$isIphone = false;
+$isIpod = false;
+
+if (isset($_SERVER['HTTP_USER_AGENT']))
+{
+	$isIphone = strpos($_SERVER['HTTP_USER_AGENT'], "iPhone") !== false;
+	$isIpod = strpos($_SERVER['HTTP_USER_AGENT'], "iPod") !== false;
+}
+
 // Add the correct header to the page
-if (strpos($_SERVER['HTTP_USER_AGENT'], "iPhone") !== false || strpos($_SERVER['HTTP_USER_AGENT'], "iPod") !== false)
+if (isset($_SERVER['HTTP_USER_AGENT']) && ($isIpod || $isIphone))
 	$header->add("DOCTYPE", $Doctype_mobile);
 else
 	$header->add("DOCTYPE", $Doctype_normal);
@@ -201,9 +210,9 @@ $styleDir = 'themes/'.$styleSheet;
 
 $css = $pageClass->getCSS();
 // Lets include special css if we are browsing on an iphone or ipod
-if (strpos($_SERVER['HTTP_USER_AGENT'], "iPhone") !== false ||
-	strpos($_SERVER['HTTP_USER_AGENT'], "iPod") !== false
-	&& file_exists($styleDir.'/iPhone.css')
+if (isset($_SERVER['HTTP_USER_AGENT']) && 
+	($isIpod || $isIphone) &&
+	file_exists($styleDir.'/iPhone.css')
 	)
 {
 	$css[] = array('path' => $styleDir.'/iPhone.css');
@@ -215,7 +224,6 @@ $header->add("STYLESHEETS", $css); // Add our array of stylesheets to our templa
 $header->add("STYLESHEET", $styleSheet);
 
 $js = $pageClass->getJS();
-$js[] = array("path" => "includes/js/GoogleAnalytics.js");
 $header->add("SCRIPTS", $js); // Put our scripts in our template
 
 echo $header->parse(); // Parse out our header file and continue

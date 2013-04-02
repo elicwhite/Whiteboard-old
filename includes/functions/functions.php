@@ -78,7 +78,7 @@ function isSecureForm()
 	//echo "sh: ".$_SESSION['formHash'];
 	$return = false;
 	
-	if (!isset($_POST['formHash']))
+	if (!isset($_POST['formHash']) || !isset($_SESSION['formHash']))
 		return false;
 	
 	if ($_POST['formHash'] == $_SESSION['formHash'])
